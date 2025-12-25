@@ -1,0 +1,11 @@
+{
+  "expo": {
+    "extra": {
+      "eas": {
+        "projectId": "862b2a7d-1a49-4666-8766-3f0d0afbe220"
+      }
+    },
+    "owner": "hrznbtc",
+    "slug": "vault-hrzn"
+  }
+}

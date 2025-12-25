@@ -1,3 +1,4 @@
+#import <Expo/Expo.h>
 //
 //  BlueWallet-Bridging-Header.h
 //  BlueWallet

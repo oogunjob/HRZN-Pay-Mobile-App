@@ -1,3 +1,4 @@
+import Expo
 import UIKit
 import React
 import React_RCTAppDelegate
@@ -11,7 +12,7 @@ class AppDelegate: RCTAppDelegate, UNUserNotificationCenterDelegate {
 
     private var userDefaultsGroup: UserDefaults?
 
-    override func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
+    override override func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
         clearFilesIfNeeded()
         
         // Fix app group UserDefaults initialization
@@ -306,7 +307,7 @@ class AppDelegate: RCTAppDelegate, UNUserNotificationCenterDelegate {
 
         if ["io.bluewallet.bluewallet.receiveonchain", "io.bluewallet.bluewallet.xpub", "io.bluewallet.bluewallet.blockexplorer"].contains(activityType) {
           EventEmitter.shared().sendUserActivity(userActivityData)
-            return true
+            return super.application(application, didFinishLaunchingWithOptions: launchOptions)
         }
 
         if activityType == NSUserActivityTypeBrowsingWeb {

@@ -1,3 +1,4 @@
+import expo.modules.ReactActivityDelegateWrapper
 package io.bluewallet.bluewallet
 
 import android.content.Context
@@ -68,5 +69,5 @@ class MainActivity : ReactActivity() {
      */
 
     override fun createReactActivityDelegate(): ReactActivityDelegate =
-        DefaultReactActivityDelegate(this, mainComponentName, fabricEnabled)
+        ReactActivityDelegateWrapper(this, BuildConfig.IS_NEW_ARCHITECTURE_ENABLED, DefaultReactActivityDelegate(this, mainComponentName, fabricEnabled))
 }

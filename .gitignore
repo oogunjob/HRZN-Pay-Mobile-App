@@ -98,3 +98,5 @@ android/app/.project
 .expo
 dist/
 web-build/
+
+ios/

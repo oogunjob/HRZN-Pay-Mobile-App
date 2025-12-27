@@ -27,7 +27,7 @@ jobs:
       - name: Checkout project
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: "0"
 
       - name: Free up disk space
         run: |
@@ -41,15 +41,15 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: yarn
+          cache: "yarn"
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
-          distribution: temurin
-          java-version: 17
+          distribution: 'temurin'
+          java-version: '17'
           # ❌ disable built-in Gradle cache to avoid double caching
-          cache: none
+          cache: "none"
 
       # ✅ Single Gradle cache, failure-safe
       - name: Setup Gradle

@@ -143,5 +143,5 @@ MIT
 
 ## RESPONSIBLE DISCLOSURE
 
-Found critical bugs/vulnerabilities? Please report them through the appropriate channels.
+Found critical bugs/vulnerabilities? Please report them through the appropriate channels or open an issue.
 Thanks!

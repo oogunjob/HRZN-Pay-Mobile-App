@@ -23,6 +23,7 @@ buildscript {
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version")
         classpath 'com.google.gms:google-services:4.4.4'  // Google Services plugin
         classpath("com.bugsnag:bugsnag-android-gradle-plugin:8.2.0")
+        classpath("expo.modules:gradle-plugin:3.0.4")
     }
 }
 

@@ -75,7 +75,4 @@ subprojects {
     }
 }
 
-// Expo plugins - only apply if you're using Expo features
-// Comment these out if they cause issues
-apply plugin: "expo-root-project"
 apply plugin: "com.facebook.react.rootproject"

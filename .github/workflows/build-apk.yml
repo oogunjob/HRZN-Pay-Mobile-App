@@ -4,9 +4,6 @@ on:
   pull_request:
     branches:
       - master
-  # push:
-  #   branches:
-  #     - master
   workflow_dispatch:
 
 jobs:
@@ -19,10 +16,8 @@ jobs:
         -XX:MaxMetaspaceSize=512m
         -XX:+HeapDumpOnOutOfMemoryError
         -Dorg.gradle.daemon=false
-        -Dorg.gradle.jvmargs=-Xmx4g -XX:MaxMetaspaceSize=512m
-        -Dorg.gradle.parallel=true
-        -Dorg.gradle.workers.max=2
-        -Dorg.gradle.caching=true
+        -Dorg.gradle.parallel=false
+        -Dorg.gradle.caching=false
 
     steps:
       - name: Checkout project
@@ -49,24 +44,29 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
-          cache: 'gradle'
 
       - name: Install node_modules
         run: yarn install --frozen-lockfile
 
-      - name: Setup Gradle
+      - name: Setup Gradle (Read-only cache)
         uses: gradle/gradle-build-action@v3
         with:
-          cache-read-only: ${{ github.ref != 'refs/heads/master' }}
+          cache-read-only: true
 
       - name: Make gradlew executable
         run: chmod +x android/gradlew
+
+      - name: Clean Android build
+        run: |
+          cd android
+          ./gradlew clean --no-daemon
 
       - name: Compile Android (Debug Build)
         run: |
           cd android
           ./gradlew assembleDebug \
             --no-daemon \
+            --no-build-cache \
             --max-workers=2 \
             -Dorg.gradle.jvmargs="-Xmx4g -XX:MaxMetaspaceSize=512m"
 

@@ -1334,6 +1334,18 @@
   dependencies:
     "@types/hammerjs" "^2.0.36"
 
+"@emotion/is-prop-valid@^0.8.2":
+  version "0.8.8"
+  resolved "https://registry.yarnpkg.com/@emotion/is-prop-valid/-/is-prop-valid-0.8.8.tgz#db28b1c4368a259b60a97311d6a952d4fd01ac1a"
+  integrity sha512-u5WtneEAr5IDG2Wv65yhunPSMLIpuKsbuOktRojfrEiEvRyC85LgPMZI63cr7NUqT8ZIGdSVg8ZKGxIug4lXcA==
+  dependencies:
+    "@emotion/memoize" "0.7.4"
+
+"@emotion/memoize@0.7.4":
+  version "0.7.4"
+  resolved "https://registry.yarnpkg.com/@emotion/memoize/-/memoize-0.7.4.tgz#19bf0f5af19149111c40d98bb0cf82119f5d9eeb"
+  integrity sha512-Ja/Vfqe3HpuzRsG1oBtWTHk2PGZ7GR+2Vz5iYGelAw8dx32K0y7PjVuxK6z1nMpZOqAFsRUPCkK1YjJ56qJlgw==
+
 "@eslint-community/eslint-utils@^4.1.2", "@eslint-community/eslint-utils@^4.2.0", "@eslint-community/eslint-utils@^4.4.0", "@eslint-community/eslint-utils@^4.7.0":
   version "4.9.0"
   resolved "https://registry.yarnpkg.com/@eslint-community/eslint-utils/-/eslint-utils-4.9.0.tgz#7308df158e064f0dd8b8fdb58aa14fa2a7f913b3"
@@ -2172,6 +2184,59 @@
 "@lodev09/react-native-true-sheet@github:BlueWallet/react-native-true-sheet#main":
   version "2.0.6"
   resolved "https://codeload.github.com/BlueWallet/react-native-true-sheet/tar.gz/59550c00493b5634a0530f370b8528207788b3d4"
+
+"@motionone/animation@^10.12.0":
+  version "10.18.0"
+  resolved "https://registry.yarnpkg.com/@motionone/animation/-/animation-10.18.0.tgz#868d00b447191816d5d5cf24b1cafa144017922b"
+  integrity sha512-9z2p5GFGCm0gBsZbi8rVMOAJCtw1WqBTIPw3ozk06gDvZInBPIsQcHgYogEJ4yuHJ+akuW8g1SEIOpTOvYs8hw==
+  dependencies:
+    "@motionone/easing" "^10.18.0"
+    "@motionone/types" "^10.17.1"
+    "@motionone/utils" "^10.18.0"
+    tslib "^2.3.1"
+
+"@motionone/dom@10.12.0":
+  version "10.12.0"
+  resolved "https://registry.yarnpkg.com/@motionone/dom/-/dom-10.12.0.tgz#ae30827fd53219efca4e1150a5ff2165c28351ed"
+  integrity sha512-UdPTtLMAktHiqV0atOczNYyDd/d8Cf5fFsd1tua03PqTwwCe/6lwhLSQ8a7TbnQ5SN0gm44N1slBfj+ORIhrqw==
+  dependencies:
+    "@motionone/animation" "^10.12.0"
+    "@motionone/generators" "^10.12.0"
+    "@motionone/types" "^10.12.0"
+    "@motionone/utils" "^10.12.0"
+    hey-listen "^1.0.8"
+    tslib "^2.3.1"
+
+"@motionone/easing@^10.18.0":
+  version "10.18.0"
+  resolved "https://registry.yarnpkg.com/@motionone/easing/-/easing-10.18.0.tgz#7b82f6010dfee3a1bb0ee83abfbaff6edae0c708"
+  integrity sha512-VcjByo7XpdLS4o9T8t99JtgxkdMcNWD3yHU/n6CLEz3bkmKDRZyYQ/wmSf6daum8ZXqfUAgFeCZSpJZIMxaCzg==
+  dependencies:
+    "@motionone/utils" "^10.18.0"
+    tslib "^2.3.1"
+
+"@motionone/generators@^10.12.0":
+  version "10.18.0"
+  resolved "https://registry.yarnpkg.com/@motionone/generators/-/generators-10.18.0.tgz#fe09ab5cfa0fb9a8884097feb7eb60abeb600762"
+  integrity sha512-+qfkC2DtkDj4tHPu+AFKVfR/C30O1vYdvsGYaR13W/1cczPrrcjdvYCj0VLFuRMN+lP1xvpNZHCRNM4fBzn1jg==
+  dependencies:
+    "@motionone/types" "^10.17.1"
+    "@motionone/utils" "^10.18.0"
+    tslib "^2.3.1"
+
+"@motionone/types@^10.12.0", "@motionone/types@^10.17.1":
+  version "10.17.1"
+  resolved "https://registry.yarnpkg.com/@motionone/types/-/types-10.17.1.tgz#cf487badbbdc9da0c2cb86ffc1e5d11147c6e6fb"
+  integrity sha512-KaC4kgiODDz8hswCrS0btrVrzyU2CSQKO7Ps90ibBVSQmjkrt2teqta6/sOG59v7+dPnKMAg13jyqtMKV2yJ7A==
+
+"@motionone/utils@^10.12.0", "@motionone/utils@^10.18.0":
+  version "10.18.0"
+  resolved "https://registry.yarnpkg.com/@motionone/utils/-/utils-10.18.0.tgz#a59ff8932ed9009624bca07c56b28ef2bb2f885e"
+  integrity sha512-3XVF7sgyTSI2KWvTf6uLlBJ5iAgRgmvp3bpuOiQJvInd4nZ19ET8lX5unn30SlmRH7hXbBbH+Gxd0m0klJ3Xtw==
+  dependencies:
+    "@motionone/types" "^10.17.1"
+    hey-listen "^1.0.8"
+    tslib "^2.3.1"
 
 "@ngraveio/bc-ur@1.1.13", "@ngraveio/bc-ur@^1.1.5":
   version "1.1.13"
@@ -3078,17 +3143,17 @@
     nanoid "3.3.8"
     stacktrace-parser "^0.1.10"
 
-"@react-navigation/drawer@7.3.7":
-  version "7.3.7"
-  resolved "https://registry.yarnpkg.com/@react-navigation/drawer/-/drawer-7.3.7.tgz#48a3f04094a5989fe7af88eb054d18857afae5d9"
-  integrity sha512-Kt0B0HAfpIUCO7UnSNEkTJiMPs3Pqwr/0Ld8KjKRuMMauLFAizDdM/1mFnxI5ZNuhLs4+t8+jVgdedz5AtF1LQ==
+"@react-navigation/drawer@^7.5.0":
+  version "7.7.10"
+  resolved "https://registry.yarnpkg.com/@react-navigation/drawer/-/drawer-7.7.10.tgz#c07651bcf917d163ff8b1a4e4c35ac527b11caa3"
+  integrity sha512-FGYU5Ebd2whTa4Z+RBCxnWqmyWIQGTJ7PAAhk2RjlVrEXLU0HaFR5JGmEHuNm/Cm9xX3xCwOxYZiA0Xi/DeyAA==
   dependencies:
-    "@react-navigation/elements" "^2.3.6"
+    "@react-navigation/elements" "^2.9.3"
     color "^4.2.3"
-    react-native-drawer-layout "^4.1.4"
-    use-latest-callback "^0.2.1"
+    react-native-drawer-layout "^4.2.1"
+    use-latest-callback "^0.2.4"
 
-"@react-navigation/elements@^2.3.6", "@react-navigation/elements@^2.9.3":
+"@react-navigation/elements@^2.9.3":
   version "2.9.3"
   resolved "https://registry.yarnpkg.com/@react-navigation/elements/-/elements-2.9.3.tgz#505ae38af347a0bc5326155318a3d9a54e2071e3"
   integrity sha512-3+eyvWiVPIEf6tN9UdduhOEHcTuNe3R5WovgiVkfH9+jApHMTZDc2loePTpY/i2HDJhObhhChpJzO6BVjrpdYQ==
@@ -3096,14 +3161,6 @@
     color "^4.2.3"
     use-latest-callback "^0.2.4"
     use-sync-external-store "^1.5.0"
-
-"@react-navigation/native-stack@7.3.8":
-  version "7.3.8"
-  resolved "https://registry.yarnpkg.com/@react-navigation/native-stack/-/native-stack-7.3.8.tgz#1a589d4627e62b3a28e7d5bba017ef92d9073f20"
-  integrity sha512-g10Xa8Wi996MgQSXg1m+6+2kip+2QN2daJXWylCVVzbLM4qVEnYlwYDfRfE0MUPUBxgAL7bggvW0zi7thX7H1A==
-  dependencies:
-    "@react-navigation/elements" "^2.3.6"
-    warn-once "^0.1.1"
 
 "@react-navigation/native-stack@^7.3.16":
   version "7.9.0"
@@ -3115,7 +3172,7 @@
     sf-symbols-typescript "^2.1.0"
     warn-once "^0.1.1"
 
-"@react-navigation/native@^7.1.26", "@react-navigation/native@^7.1.8":
+"@react-navigation/native@^7.1.8":
   version "7.1.26"
   resolved "https://registry.yarnpkg.com/@react-navigation/native/-/native-7.1.26.tgz#220672e115f39014b95ca3ce8f2c37076a0e74f4"
   integrity sha512-RhKmeD0E2ejzKS6z8elAfdfwShpcdkYY8zJzvHYLq+wv183BBcElTeyMLcIX6wIn7QutXeI92Yi21t7aUWfqNQ==
@@ -6378,6 +6435,11 @@ expo-keep-awake@~15.0.8:
   resolved "https://registry.yarnpkg.com/expo-keep-awake/-/expo-keep-awake-15.0.8.tgz#911c5effeba9baff2ccde79ef0ff5bf856215f8d"
   integrity sha512-YK9M1VrnoH1vLJiQzChZgzDvVimVoriibiDIFLbQMpjYBnvyfUeHJcin/Gx1a+XgupNXy92EQJLgI/9ZuXajYQ==
 
+expo-linear-gradient@~15.0.8:
+  version "15.0.8"
+  resolved "https://registry.yarnpkg.com/expo-linear-gradient/-/expo-linear-gradient-15.0.8.tgz#17cb49522699d2a033eae93146bc820ef180f4f8"
+  integrity sha512-V2d8Wjn0VzhPHO+rrSBtcl+Fo+jUUccdlmQ6OoL9/XQB7Qk3d9lYrqKDJyccwDxmQT10JdST3Tmf2K52NLc3kw==
+
 expo-linking@~8.0.11:
   version "8.0.11"
   resolved "https://registry.yarnpkg.com/expo-linking/-/expo-linking-8.0.11.tgz#b13ca9fc409ef0536352443221eb50e5e2bee366"
@@ -6728,6 +6790,27 @@ form-data@^3.0.0:
     es-set-tostringtag "^2.1.0"
     hasown "^2.0.2"
     mime-types "^2.1.35"
+
+framer-motion@^6.5.1:
+  version "6.5.1"
+  resolved "https://registry.yarnpkg.com/framer-motion/-/framer-motion-6.5.1.tgz#802448a16a6eb764124bf36d8cbdfa6dd6b931a7"
+  integrity sha512-o1BGqqposwi7cgDrtg0dNONhkmPsUFDaLcKXigzuTFC5x58mE8iyTazxSudFzmT6MEyJKfjjU8ItoMe3W+3fiw==
+  dependencies:
+    "@motionone/dom" "10.12.0"
+    framesync "6.0.1"
+    hey-listen "^1.0.8"
+    popmotion "11.0.3"
+    style-value-types "5.0.0"
+    tslib "^2.1.0"
+  optionalDependencies:
+    "@emotion/is-prop-valid" "^0.8.2"
+
+framesync@6.0.1:
+  version "6.0.1"
+  resolved "https://registry.yarnpkg.com/framesync/-/framesync-6.0.1.tgz#5e32fc01f1c42b39c654c35b16440e07a25d6f20"
+  integrity sha512-fUY88kXvGiIItgNC7wcTOl0SNRCVXMKSWW2Yzfmn7EKNc+MpCzcz9DhdHcdjbrtN3c6R4H5dTY2jiCpPdysEjA==
+  dependencies:
+    tslib "^2.1.0"
 
 freeport-async@^2.0.0:
   version "2.0.0"
@@ -7106,6 +7189,11 @@ hermes-parser@0.32.0:
   integrity sha512-g4nBOWFpuiTqjR3LZdRxKUkij9iyveWeuks7INEsMX741f3r9xxrOe8TeQfUxtda0eXmiIFiMQzoeSQEno33Hw==
   dependencies:
     hermes-estree "0.32.0"
+
+hey-listen@^1.0.8:
+  version "1.0.8"
+  resolved "https://registry.yarnpkg.com/hey-listen/-/hey-listen-1.0.8.tgz#8e59561ff724908de1aa924ed6ecc84a56a9aa68"
+  integrity sha512-COpmrF2NOg4TBWUJ5UVyaCU2A88wEMkUPK4hNqyCkqHbxT92BbvfjoSozkAIIm6XhicGlJHhFdullInrdhwU8Q==
 
 hmac-drbg@^1.0.1:
   version "1.0.1"
@@ -8988,6 +9076,13 @@ moment@^2.19.3:
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.30.1.tgz#f8c91c07b7a786e30c59926df530b4eac96974ae"
   integrity sha512-uEmtNhbDOrWPFS+hdjFCBfy9f2YoyzRpwcl+DqpC6taX21FzsTLQVbMV/W7PzNSX6x/bhC1zA3c2UQ5NzH6how==
 
+moti@^0.30.0:
+  version "0.30.0"
+  resolved "https://registry.yarnpkg.com/moti/-/moti-0.30.0.tgz#47ef9767a94e1898aad356af4016086736d64a66"
+  integrity sha512-YN78mcefo8kvJaL+TZNyusq6YA2aMFvBPl8WiLPy4eb4wqgOFggJOjP9bUr2YO8PrAt0uusmRG8K4RPL4OhCsA==
+  dependencies:
+    framer-motion "^6.5.1"
+
 ms@2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.0.0.tgz#5608aeadfc00be6c2901df5f9861788de0d597c8"
@@ -9596,6 +9691,16 @@ pngjs@^7.0.0:
   resolved "https://registry.yarnpkg.com/pngjs/-/pngjs-7.0.0.tgz#a8b7446020ebbc6ac739db6c5415a65d17090e26"
   integrity sha512-LKWqWJRhstyYo9pGvgor/ivk2w94eSjE3RGVuzLGlr3NmD8bf7RcYGze1mNdEHRP6TRP6rMuDHk5t44hnTRyow==
 
+popmotion@11.0.3:
+  version "11.0.3"
+  resolved "https://registry.yarnpkg.com/popmotion/-/popmotion-11.0.3.tgz#565c5f6590bbcddab7a33a074bb2ba97e24b0cc9"
+  integrity sha512-Y55FLdj3UxkR7Vl3s7Qr4e9m0onSnP8W7d/xQLsoJM40vs6UKHFdygs6SWryasTZYqugMjm3BepCF4CWXDiHgA==
+  dependencies:
+    framesync "6.0.1"
+    hey-listen "^1.0.8"
+    style-value-types "5.0.0"
+    tslib "^2.1.0"
+
 possible-typed-array-names@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/possible-typed-array-names/-/possible-typed-array-names-1.1.0.tgz#93e3582bc0e5426586d9d07b79ee40fc841de4ae"
@@ -9932,7 +10037,7 @@ react-native-draglist@^3.10.0:
   resolved "https://registry.yarnpkg.com/react-native-draglist/-/react-native-draglist-3.10.0.tgz#a95f0c724e469f16f235776ebaafdd91381d64bf"
   integrity sha512-IlQ9qHuesN3OC4l2fubzAYm/uvUn+c43FbBqXr1WQzqKOgs8mo/6AcMQl2GEwtPlKnrnfRM+M65PL09mwE7GeQ==
 
-react-native-drawer-layout@^4.1.4:
+react-native-drawer-layout@^4.2.1:
   version "4.2.1"
   resolved "https://registry.yarnpkg.com/react-native-drawer-layout/-/react-native-drawer-layout-4.2.1.tgz#5c89425662c9b5216a227dbc87bc7f38c4ec8719"
   integrity sha512-liwRJ7ynRU/ogRlUdiK1Yoi1VzUSq2Vu/RU+UgqlMB3XduslZ1DZg/mTX0f1uCEV2dJ4ec+1fRa3OlIierfyZg==
@@ -11200,6 +11305,14 @@ structured-headers@^0.4.1:
   resolved "https://registry.yarnpkg.com/structured-headers/-/structured-headers-0.4.1.tgz#77abd9410622c6926261c09b9d16cf10592694d1"
   integrity sha512-0MP/Cxx5SzeeZ10p/bZI0S6MpgD+yxAhi1BOQ34jgnMXsCq3j1t6tQnZu+KdlL7dvJTLT3g9xN8tl10TqgFMcg==
 
+style-value-types@5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/style-value-types/-/style-value-types-5.0.0.tgz#76c35f0e579843d523187989da866729411fc8ad"
+  integrity sha512-08yq36Ikn4kx4YU6RD7jWEv27v4V+PUsOGa4n/as8Et3CuODMJQ00ENeAVXAeydX4Z2j1XHZF1K2sX4mGl18fA==
+  dependencies:
+    hey-listen "^1.0.8"
+    tslib "^2.1.0"
+
 sucrase@~3.35.1:
   version "3.35.1"
   resolved "https://registry.yarnpkg.com/sucrase/-/sucrase-3.35.1.tgz#4619ea50393fe8bd0ae5071c26abd9b2e346bfe1"
@@ -11498,7 +11611,7 @@ tslib@^1.8.1:
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.14.1.tgz#cf2d38bdc34a134bcaf1091c41f6619e2f672d00"
   integrity sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==
 
-tslib@^2.0.0, tslib@^2.0.1, tslib@^2.1.0, tslib@^2.3.0, tslib@^2.5.3:
+tslib@^2.0.0, tslib@^2.0.1, tslib@^2.1.0, tslib@^2.3.0, tslib@^2.3.1, tslib@^2.5.3:
   version "2.8.1"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.8.1.tgz#612efe4ed235d567e8aba5f2a5fab70280ade83f"
   integrity sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w==

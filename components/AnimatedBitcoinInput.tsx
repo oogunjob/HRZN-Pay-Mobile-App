@@ -8,25 +8,53 @@ import Animated, {
 } from "react-native-reanimated";
 
 function formatNumberWithCommas(formatter: Intl.NumberFormat, num: number, rawValue: string) {
+  const hasDecimal = rawValue.includes('.');
+  
+  // If the raw value has a decimal, we need to preserve the decimal portion exactly as typed
+  // This handles cases like "0.0", "0.00", "123.450" where trailing zeros matter
+  if (hasDecimal) {
+    const [integerPart, decimalPart] = rawValue.split('.');
+    // Format only the integer part with commas
+    const formattedInteger = formatter.format(parseInt(integerPart || '0'));
+    
+    const result: { value: string; key: string }[] = [];
+    let commaCount = 0;
+    
+    // Add formatted integer digits
+    for (let i = 0; i < formattedInteger.length; i++) {
+      const char = formattedInteger[i];
+      if (char === ",") {
+        result.push({ value: char, key: `comma-${i}` });
+        commaCount++;
+      } else {
+        result.push({ value: char, key: `digit-${i - commaCount}` });
+      }
+    }
+    
+    // Add decimal point
+    result.push({ value: '.', key: 'decimal' });
+    
+    // Add decimal digits exactly as typed (preserving trailing zeros)
+    for (let i = 0; i < decimalPart.length; i++) {
+      result.push({ value: decimalPart[i], key: `decimal-digit-${i}` });
+    }
+    
+    return result;
+  }
+  
+  // No decimal - use original formatting logic
   const formattedNum = formatter.format(num);
   const result: { value: string; key: string }[] = [];
   let commaCount = 0;
 
   for (let i = 0; i < formattedNum.length; i++) {
     const char = formattedNum[i];
-    // We want to count the number of commas because we would like to
-    // keep the index of the digits the same.
     if (char === ",") {
       result.push({ value: char, key: `comma-${i}` });
       commaCount++;
     } else {
       result.push({ value: char, key: `digit-${i - commaCount}` });
     }
-  }
-  
-  // If raw value ends with a decimal point (like "0." or "123."), add it to the result
-  if (rawValue.endsWith('.')) {
-    result.push({ value: '.', key: `decimal-end` });
   }
 
   return result;

@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { StyleSheet, TouchableOpacity, SafeAreaView, StatusBar, Dimensions } from 'react-native';
+import { StyleSheet, TouchableOpacity, SafeAreaView, StatusBar, Dimensions, View, Text } from 'react-native';
 import { useColorScheme } from 'react-native';
 import AnimatedBitcoinInput from '@/components/AnimatedBitcoinInput';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -9,13 +9,12 @@ import { useThemeColor } from '@/hooks/use-theme-color';
 
 const { width } = Dimensions.get('window');
 
-// Keyboard component extracted from BitcoinKeyboard
-const keys = [1, 2, 3, 4, 5, 6, 7, 8, 9, 'space', 0, 'delete'] as const;
+// Keyboard constants - matching original OriginalKeyboard.tsx structure
+const keys = [1, 2, 3, 4, 5, 6, 7, 8, 9, 'decimal', 0, 'delete'] as const;
 type Keys = (typeof keys)[number];
-const _keySize = 70; // Fixed size like original BitcoinKeyboard
-const _keySpacing = 40; // Horizontal space between keys
-const _keyboardWidth = _keySize * 3 + _keySpacing * 2; // Total width of keyboard
-const verticalSpacing = 5; // Vertical spacing between rows
+const _keySize = width / 4; // Width of each key
+const _keyHeight = 78; // Height of each key (reduced for less vertical spacing)
+const _passcodeSpacing = 20; // Reduced padding to move columns closer to screen edges
 
 const PassCodeKeyboard = ({ onPress, onDecimalPress, textColor, iconColor }: { 
   onPress: (key: Keys) => void; 
@@ -24,73 +23,60 @@ const PassCodeKeyboard = ({ onPress, onDecimalPress, textColor, iconColor }: {
   iconColor: string;
 }) => {
   return (
-    <ThemedView
+    <View
       style={{
         flexDirection: 'row',
         flexWrap: 'wrap',
-        width: _keyboardWidth,
-        alignSelf: 'center',
+        paddingHorizontal: _passcodeSpacing,
+        justifyContent: 'space-between',
       }}>
-      {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((key, index) => {
-        const isLastInRow = (index + 1) % 3 === 0;
-        
+      {keys.map((key) => {
+        if (key === 'decimal') {
+          return (
+            <TouchableOpacity
+              onPress={onDecimalPress}
+              key="decimal"
+              style={{
+                width: _keySize,
+                height: _keyHeight,
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
+              <View>
+                <Text style={{ color: textColor, fontSize: 32, fontWeight: '700' }}>
+                  .
+                </Text>
+              </View>
+            </TouchableOpacity>
+          );
+        }
         return (
           <TouchableOpacity
-            onPress={() => onPress(key as Keys)}
+            onPress={() => key === 'delete' ? onPress(key) : onPress(key)}
             key={key}
             style={{
               width: _keySize,
-              height: _keySize,
+              height: _keyHeight,
               alignItems: 'center',
               justifyContent: 'center',
-              marginRight: isLastInRow ? 0 : _keySpacing,
-              marginBottom: verticalSpacing,
             }}>
-            <ThemedText style={{ fontSize: 32, fontWeight: '700', color: textColor }}>{key}</ThemedText>
+            <View>
+              {key === 'delete' ? (
+                <MaterialCommunityIcons
+                  name="keyboard-backspace"
+                  size={42}
+                  color={iconColor}
+                />
+              ) : (
+                <Text style={{ color: textColor, fontSize: 32, fontWeight: '700' }}>
+                  {key}
+                </Text>
+              )}
+            </View>
           </TouchableOpacity>
         );
       })}
-      
-      {/* Bottom row: decimal, 0, delete */}
-      <TouchableOpacity
-        onPress={onDecimalPress}
-        style={{
-          width: _keySize,
-          height: _keySize,
-          alignItems: 'center',
-          justifyContent: 'center',
-          marginRight: _keySpacing,
-        }}>
-        <ThemedText style={{ fontSize: 32, fontWeight: '700', color: textColor }}>.</ThemedText>
-      </TouchableOpacity>
-      
-      <TouchableOpacity
-        onPress={() => onPress(0)}
-        style={{
-          width: _keySize,
-          height: _keySize,
-          alignItems: 'center',
-          justifyContent: 'center',
-          marginRight: _keySpacing,
-        }}>
-        <ThemedText style={{ fontSize: 32, fontWeight: '700', color: textColor }}>0</ThemedText>
-      </TouchableOpacity>
-      
-      <TouchableOpacity
-        onPress={() => onPress('delete')}
-        style={{
-          width: _keySize,
-          height: _keySize,
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}>
-        <MaterialCommunityIcons
-          name="keyboard-backspace"
-          size={36}
-          color={iconColor}
-        />
-      </TouchableOpacity>
-    </ThemedView>
+    </View>
   );
 };
 
@@ -222,7 +208,7 @@ export default function PayScreen() {
           </ThemedView>
 
           {/* Keyboard */}
-          <ThemedView style={styles.keyboardContainer}>
+          <View style={styles.keyboardContainer}>
             <PassCodeKeyboard 
               onPress={handleKeyPress} 
               onDecimalPress={handleDecimal}
@@ -231,7 +217,7 @@ export default function PayScreen() {
             />
             
             {/* Action Buttons */}
-            <ThemedView style={styles.actionButtons}>
+            <View style={styles.actionButtons}>
               <TouchableOpacity style={[styles.actionButton, styles.payButton]}>
                 <ThemedText style={styles.actionButtonText}>Pay</ThemedText>
               </TouchableOpacity>
@@ -239,10 +225,10 @@ export default function PayScreen() {
                 styles.actionButton,
                 { backgroundColor: borderColor }
               ]}>
-                <ThemedText style={[styles.actionButtonText, { color: textColor }]}>Request</ThemedText>
-              </TouchableOpacity>
-            </ThemedView>
-          </ThemedView>
+              <ThemedText style={[styles.actionButtonText, { color: textColor }]}>Request</ThemedText>
+            </TouchableOpacity>
+          </View>
+        </View>
         </ThemedView>
       </SafeAreaView>
     </ThemedView>

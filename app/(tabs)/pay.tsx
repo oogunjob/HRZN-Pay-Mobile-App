@@ -151,21 +151,23 @@ export default function PayScreen() {
   return (
     <ThemedView style={styles.container}>
       <StatusBar barStyle={colorScheme === 'dark' ? 'light-content' : 'dark-content'} />
-      <View style={{ flex: 1, paddingTop: insets.top, paddingBottom: insets.bottom }}>
+      <View style={{ flex: 1, paddingTop: insets.top }}>
         <ThemedView style={styles.content}>
-          {/* Header */}
-          <ThemedView style={styles.header}>
-            <TouchableOpacity style={styles.headerButton}>
-              <MaterialCommunityIcons name="close" size={24} color={textColor} />
-            </TouchableOpacity>
-            <ThemedText type="title" style={styles.headerTitle}>Pay</ThemedText>
-            <TouchableOpacity style={styles.headerButton}>
-              <MaterialCommunityIcons name="qrcode-scan" size={24} color={textColor} />
-            </TouchableOpacity>
-          </ThemedView>
+          {/* Top Section: Header + Amount */}
+          <View>
+            {/* Header */}
+            <ThemedView style={styles.header}>
+              <TouchableOpacity style={styles.headerButton}>
+                <MaterialCommunityIcons name="close" size={24} color={textColor} />
+              </TouchableOpacity>
+              <ThemedText type="title" style={styles.headerTitle}>Pay</ThemedText>
+              <TouchableOpacity style={styles.headerButton}>
+                <MaterialCommunityIcons name="qrcode-scan" size={24} color={textColor} />
+              </TouchableOpacity>
+            </ThemedView>
 
-          {/* Amount Display */}
-          <ThemedView style={styles.amountContainer}>
+            {/* Amount Display */}
+            <ThemedView style={styles.amountContainer}>
             <AnimatedBitcoinInput
               ref={inputRef}
               value={amount}
@@ -209,6 +211,7 @@ export default function PayScreen() {
               </TouchableOpacity>
             </ThemedView> */}
           </ThemedView>
+          </View>
 
           {/* Keyboard */}
           <View style={styles.keyboardContainer}>
@@ -267,7 +270,7 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    justifyContent: 'flex-start',
+    justifyContent: 'space-between',
   },
   header: {
     flexDirection: 'row',
@@ -354,8 +357,7 @@ const styles = StyleSheet.create({
   },
   keyboardContainer: {
     paddingTop: 10,
-    paddingBottom: 20,
-    marginTop: 'auto',
+    paddingBottom: 80,
   },
 });
 

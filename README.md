@@ -1,27 +1,29 @@
-# Vault by HRZN BTC - A Bitcoin & Lightning Wallet
+# HRZN Pay - Modern Bitcoin Payment Wallet
 
 <div align="center">
-  <img src="assets/transparent-icon.png" alt="Vault by HRZN BTC Logo" width="200" />
+  <img src="assets/transparent-icon.png" alt="HRZN Pay Logo" width="200" />
 </div>
 
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 ![](https://img.shields.io/github/license/BlueWallet/BlueWallet.svg)
 
-**Vault by HRZN BTC** is a fork of the popular [BlueWallet](https://github.com/BlueWallet/BlueWallet) mobile wallet, rebuilt with Expo and enhanced with a modern design and new features.
+**HRZN Pay** is a modern Bitcoin payment wallet designed to make sending and receiving Bitcoin as simple and intuitive as PayPal, Cash App, or Venmo. Built for mainstream Bitcoin adoption, HRZN Pay combines the security of a self-custodial wallet with the user experience of modern payment apps.
 
 ## About
 
-This project is a fork of BlueWallet, a thin Bitcoin wallet built with React Native and Electrum. Vault has been converted to use Expo, providing improved developer experience, easier builds, and enhanced cross-platform compatibility. The app includes a refreshed design and will feature new functionality beyond the original BlueWallet.
+HRZN Pay is a modern Bitcoin payment wallet that aims to accelerate Bitcoin adoption by making it as easy to use as traditional payment apps. Think of it as the PayPal or Cash App for Bitcoin—simple, fast, and secure.
+
+Built as a fork of [BlueWallet](https://github.com/BlueWallet/BlueWallet) and rebuilt with Expo, HRZN Pay focuses on delivering a seamless payment experience. Whether you're sending Bitcoin to friends, paying for services, or managing your Bitcoin balance, HRZN Pay makes it feel as natural as sending money through any other payment app—but with the power and freedom of Bitcoin.
 
 ### Key Features
 
-* Private keys never leave your device
-* Lightning Network supported
-* SegWit-first. Replace-By-Fee support
-* Encryption. Plausible deniability
-* Modern UI/UX design
-* Built with Expo for enhanced development workflow
-* New features and improvements coming soon
+* **Simple Payment Experience** - Send and receive Bitcoin with the same ease as PayPal, Cash App, or Venmo
+* **Self-Custodial Security** - Your private keys never leave your device. You own your Bitcoin.
+* **Lightning Network** - Fast, low-cost Bitcoin transactions via the Lightning Network
+* **Modern Design** - Beautiful, intuitive interface designed for mainstream adoption
+* **SegWit & RBF Support** - Advanced Bitcoin features for optimal transaction efficiency
+* **Encryption & Privacy** - Full encryption with plausible deniability for your security
+* **Built with Expo** - Modern development stack for rapid iteration and cross-platform compatibility
 
 
 <img src="https://i.imgur.com/hHYJnMj.png" width="100%">
@@ -51,7 +53,7 @@ node --version && yarn --version
 
 ```bash
 git clone <repository-url>
-cd Vault-HRZN-BTC-App
+cd HRZN-Pay-Mobile-App
 ```
 
 2. Install dependencies using Yarn:
@@ -131,11 +133,11 @@ yarn test
 
 ## WANT TO CONTRIBUTE?
 
-Contributions are welcome! This is a fork of BlueWallet that's been enhanced with Expo and new features. Feel free to submit issues and pull requests.
+Contributions are welcome! HRZN Pay is a fork of BlueWallet that's been rebuilt with Expo and redesigned as a modern payment wallet. We're building the future of Bitcoin payments, and your contributions help make Bitcoin more accessible to everyone. Feel free to submit issues and pull requests.
 
 ## Based on BlueWallet
 
-This project is a fork of [BlueWallet](https://github.com/BlueWallet/BlueWallet), an open-source Bitcoin wallet. We've converted it to use Expo and are adding new features and design improvements.
+HRZN Pay is built on top of [BlueWallet](https://github.com/BlueWallet/BlueWallet), an open-source Bitcoin wallet. We've converted it to use Expo, redesigned it for a modern payment experience, and are adding new features focused on making Bitcoin payments as simple as traditional payment apps.
 
 Original BlueWallet resources:
 * Website: [bluewallet.io](https://bluewallet.io)

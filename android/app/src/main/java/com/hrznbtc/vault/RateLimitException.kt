@@ -1,4 +1,4 @@
-package com.hrznbtc.vault
+package com.hrznbtc.hrznpay
 
 /**
  * Exception thrown when an API rate limit is encountered

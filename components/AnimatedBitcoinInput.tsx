@@ -146,7 +146,7 @@ const AnimatedBitcoinInput = forwardRef<TextInput, AnimatedInputProps>(({
         onTextLayout={(e) => {
           setFontSize(e.nativeEvent.lines[0].capHeight);
         }}>
-        {formattedNumbers.map((x) => x.value).join("")}
+        ₿{formattedNumbers.map((x) => x.value).join("")}
       </Text>
       <Animated.View
         style={{
@@ -155,6 +155,11 @@ const AnimatedBitcoinInput = forwardRef<TextInput, AnimatedInputProps>(({
           justifyContent: "center",
           overflow: "hidden",
         }}>
+        <Animated.Text
+          layout={LinearTransition.duration(animationDuration)}
+          style={[styles.text, style, { fontSize, marginRight: fontSize * 0.1 }]}>
+          ₿
+        </Animated.Text>
         {formattedNumbers.map((formattedNumber, idx) => {
           return (
             <Animated.Text

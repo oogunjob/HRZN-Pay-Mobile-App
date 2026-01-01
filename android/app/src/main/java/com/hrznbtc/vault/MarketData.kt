@@ -1,4 +1,4 @@
-package com.hrznbtc.vault
+package com.hrznbtc.hrznpay
 
 import android.util.Log
 import java.text.NumberFormat

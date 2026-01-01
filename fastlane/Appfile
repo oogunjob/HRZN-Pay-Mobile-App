@@ -1,3 +1,3 @@
-app_identifier("com.hrznbtc.vault")
+app_identifier("com.hrznbtc.hrznpay")
 apple_id(ENV["APPLE_ID"]) # Your Apple email ID
 itc_team_id(ENV["ITC_TEAM_ID"]) # App Store Connect Team ID

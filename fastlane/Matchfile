@@ -9,11 +9,11 @@ type(ENV["MATCH_TYPE"] || "appstore")
 
 # App identifiers for all BlueWallet apps
 app_identifier([
-  "com.hrznbtc.vault", 
-  "com.hrznbtc.vault.watch", 
-  "com.hrznbtc.vault.watch.extension", 
-  "com.hrznbtc.vault.Stickers", 
-  "com.hrznbtc.vault.MarketWidget"
+  "com.hrznbtc.hrznpay", 
+  "com.hrznbtc.hrznpay.watch", 
+  "com.hrznbtc.hrznpay.watch.extension", 
+  "com.hrznbtc.hrznpay.Stickers", 
+  "com.hrznbtc.hrznpay.MarketWidget"
 ])
 
 # Your Apple Developer account email address

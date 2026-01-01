@@ -168,7 +168,7 @@ select device in "${devices[@]}"; do
       # dynamically build APNS payload with selected address
       read -r -d '' APNS_PAYLOAD << JSON
 {
-  "Simulator Target Bundle": "com.hrznbtc.vault",
+  "Simulator Target Bundle": "com.hrznbtc.hrznpay",
   "aps": {
     "alert": {
       "title": "Transaction Received",

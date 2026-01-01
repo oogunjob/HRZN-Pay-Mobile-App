@@ -28,7 +28,7 @@
     <meta-data android:name="com.bugsnag.android.API_KEY" android:value="YOUR_API_KEY_HERE"/>
     <meta-data android:name="com.dieam.reactnativepushnotification.channel_create_default" android:value="true"/>
     <meta-data android:name="com.dieam.reactnativepushnotification.notification_channel_description" android:value="Notifications about incoming payments"/>
-    <meta-data android:name="com.dieam.reactnativepushnotification.notification_channel_name" android:value="Vault notifications"/>
+    <meta-data android:name="com.dieam.reactnativepushnotification.notification_channel_name" android:value="HRZN Pay notifications"/>
     <meta-data android:name="com.dieam.reactnativepushnotification.notification_color" android:resource="@color/white"/>
     <meta-data android:name="com.dieam.reactnativepushnotification.notification_foreground" android:value="true"/>
     <meta-data android:name="expo.modules.updates.ENABLED" android:value="false"/>
@@ -60,14 +60,14 @@
         <action android:name="android.intent.action.VIEW"/>
         <category android:name="android.intent.category.DEFAULT"/>
         <category android:name="android.intent.category.BROWSABLE"/>
-        <data android:scheme="exp+vault-hrzn"/>
-        <data android:scheme="com.hrznbtc.vault"/>
+        <data android:scheme="exp+hrzn-pay"/>
+        <data android:scheme="com.hrznbtc.hrznpay"/>
       </intent-filter>
       <intent-filter>
         <action android:name="android.intent.action.VIEW"/>
         <category android:name="android.intent.category.DEFAULT"/>
         <data android:scheme="file" android:mimeType="application/octet-stream" android:pathPattern=".*\\.psbt"/>
-        <data android:scheme="com.hrznbtc.vault"/>
+        <data android:scheme="com.hrznbtc.hrznpay"/>
       </intent-filter>
       <intent-filter tools:ignore="AppLinkUrlError">
         <action android:name="android.intent.action.VIEW"/>
@@ -80,27 +80,27 @@
         <data android:scheme="blue"/>
         <data android:scheme="http"/>
         <data android:scheme="https"/>
-        <data android:scheme="com.hrznbtc.vault"/>
+        <data android:scheme="com.hrznbtc.hrznpay"/>
       </intent-filter>
       <intent-filter tools:ignore="AppLinkUrlError">
         <action android:name="android.intent.action.VIEW"/>
         <category android:name="android.intent.category.DEFAULT"/>
         <data android:scheme="file" android:mimeType="application/octet-stream" android:pathPattern=".*\\.*"/>
-        <data android:scheme="com.hrznbtc.vault"/>
+        <data android:scheme="com.hrznbtc.hrznpay"/>
       </intent-filter>
       <intent-filter>
         <action android:name="android.intent.action.VIEW"/>
         <action android:name="android.intent.action.EDIT"/>
         <category android:name="android.intent.category.DEFAULT"/>
         <data android:mimeType="application/octet-stream" android:pathPattern=".*\\.psbt"/>
-        <data android:scheme="com.hrznbtc.vault"/>
+        <data android:scheme="com.hrznbtc.hrznpay"/>
       </intent-filter>
       <intent-filter>
         <action android:name="android.intent.action.VIEW"/>
         <action android:name="android.intent.action.EDIT"/>
         <category android:name="android.intent.category.DEFAULT"/>
         <data android:mimeType="text/plain" android:pathPattern=".*\\.psbt"/>
-        <data android:scheme="com.hrznbtc.vault"/>
+        <data android:scheme="com.hrznbtc.hrznpay"/>
       </intent-filter>
     </activity>
     <provider android:name="androidx.core.content.FileProvider" android:authorities="${applicationId}.provider" android:exported="false" android:grantUriPermissions="true">
@@ -127,7 +127,7 @@
       </intent-filter>
       <meta-data android:name="android.appwidget.provider" android:resource="@xml/market_widget_info"/>
     </receiver>
-    <activity-alias android:name=".SettingsActivityAlias" android:label="Vault Settings" android:exported="true" android:targetActivity=".SettingsActivity">
+    <activity-alias android:name=".SettingsActivityAlias" android:label="HRZN Pay Settings" android:exported="true" android:targetActivity=".SettingsActivity">
       <intent-filter>
         <action android:name="android.intent.action.APPLICATION_PREFERENCES"/>
         <category android:name="android.intent.category.DEFAULT"/>

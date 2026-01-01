@@ -1,4 +1,4 @@
-package com.hrznbtc.vault
+package com.hrznbtc.hrznpay
 
 import android.content.BroadcastReceiver
 import android.content.Context

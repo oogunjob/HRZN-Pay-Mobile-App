@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
-import { StyleSheet, TouchableOpacity, SafeAreaView, StatusBar, Dimensions, View, Text } from 'react-native';
+import { StyleSheet, TouchableOpacity, StatusBar, Dimensions, View, Text } from 'react-native';
 import { useColorScheme } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import AnimatedBitcoinInput from '@/components/AnimatedBitcoinInput';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -83,6 +84,7 @@ const PassCodeKeyboard = ({ onPress, onDecimalPress, textColor, iconColor }: {
 
 export default function PayScreen() {
   const colorScheme = useColorScheme();
+  const insets = useSafeAreaInsets();
   const [amount, setAmount] = useState('0');
   const inputRef = useRef<any>(null);
   const [currency, setCurrency] = useState<'BTC' | 'USD'>('BTC');
@@ -149,7 +151,7 @@ export default function PayScreen() {
   return (
     <ThemedView style={styles.container}>
       <StatusBar barStyle={colorScheme === 'dark' ? 'light-content' : 'dark-content'} />
-      <SafeAreaView style={{ flex: 1, backgroundColor }}>
+      <View style={{ flex: 1, paddingTop: insets.top, paddingBottom: insets.bottom }}>
         <ThemedView style={styles.content}>
           {/* Header */}
           <ThemedView style={styles.header}>
@@ -254,7 +256,7 @@ export default function PayScreen() {
             </View>
         </View>
         </ThemedView>
-      </SafeAreaView>
+      </View>
     </ThemedView>
   );
 }

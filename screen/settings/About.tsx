@@ -75,7 +75,7 @@ const About: React.FC = () => {
   const handleOnRatePress = () => {
     const options = {
       AppleAppID: '1376878040',
-      GooglePackageName: 'com.hrznbtc.hrznpay',
+      GooglePackageName: 'com.hrznbtc.hrzn',
       preferredAndroidMarket: AndroidMarket.Google,
       preferInApp: Platform.OS !== 'android',
       openAppStoreIfInAppFails: true,

@@ -1,4 +1,4 @@
-package com.hrznbtc.hrznpay
+package com.hrznbtc.hrzn
 
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
@@ -13,13 +13,13 @@ import androidx.work.WorkManager
 import kotlinx.coroutines.delay
 import org.json.JSONObject
 import java.util.concurrent.TimeUnit
-import com.hrznbtc.hrznpay.ElectrumClient.ElectrumServer
+import com.hrznbtc.hrzn.ElectrumClient.ElectrumServer
 
 class MarketWidget : AppWidgetProvider() {
 
     companion object {
         private const val TAG = "MarketWidget"
-        private const val SHARED_PREF_NAME = "group.com.hrznbtc.hrznpay"
+        private const val SHARED_PREF_NAME = "group.com.hrznbtc.hrzn"
         private const val DEFAULT_CURRENCY = "USD"
         private const val KEY_LAST_ONLINE_STATUS = "market_widget_last_online_status"
 

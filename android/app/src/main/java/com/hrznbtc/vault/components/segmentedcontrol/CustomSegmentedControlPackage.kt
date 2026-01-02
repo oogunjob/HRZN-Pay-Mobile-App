@@ -1,4 +1,4 @@
-package com.hrznbtc.hrznpay.components.segmentedcontrol
+package com.hrznbtc.hrzn.components.segmentedcontrol
 
 import com.facebook.react.ReactPackage
 import com.facebook.react.bridge.NativeModule

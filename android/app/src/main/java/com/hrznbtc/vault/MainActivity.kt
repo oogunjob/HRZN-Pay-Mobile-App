@@ -1,4 +1,4 @@
-package com.hrznbtc.hrznpay
+package com.hrznbtc.hrzn
 
 import expo.modules.splashscreen.SplashScreenManager
 import android.content.Context
@@ -46,7 +46,7 @@ class MainActivity : ReactActivity() {
     }
     
     private fun checkAndShowCacheClearedAlert() {
-        val sharedPref = getSharedPreferences("group.com.hrznbtc.hrznpay", Context.MODE_PRIVATE)
+        val sharedPref = getSharedPreferences("group.com.hrznbtc.hrzn", Context.MODE_PRIVATE)
         val shouldShowAlert = sharedPref.getBoolean("shouldShowCacheClearedAlert", false)
         
         if (shouldShowAlert) {

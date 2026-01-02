@@ -1,19 +1,19 @@
-# HRZN Pay - Modern Bitcoin Payment Wallet
+# HRZN - Modern Bitcoin Payment Wallet
 
 <div align="center">
-  <img src="assets/transparent-icon.png" alt="HRZN Pay Logo" width="200" />
+  <img src="assets/transparent-icon.png" alt="HRZN Logo" width="200" />
 </div>
 
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 ![](https://img.shields.io/github/license/BlueWallet/BlueWallet.svg)
 
-**HRZN Pay** is a modern Bitcoin payment wallet designed to make sending and receiving Bitcoin as simple and intuitive as PayPal, Cash App, or Venmo. Built for mainstream Bitcoin adoption, HRZN Pay combines the security of a self-custodial wallet with the user experience of modern payment apps.
+**HRZN** is a modern Bitcoin payment wallet designed to make sending and receiving Bitcoin as simple and intuitive as PayPal, Cash App, or Venmo. Built for mainstream Bitcoin adoption, HRZN combines the security of a self-custodial wallet with the user experience of modern payment apps.
 
 ## About
 
-HRZN Pay is a modern Bitcoin payment wallet that aims to accelerate Bitcoin adoption by making it as easy to use as traditional payment apps. Think of it as the PayPal or Cash App for Bitcoin—simple, fast, and secure.
+HRZN is a modern Bitcoin payment wallet that aims to accelerate Bitcoin adoption by making it as easy to use as traditional payment apps. Think of it as the PayPal or Cash App for Bitcoin—simple, fast, and secure.
 
-Built as a fork of [BlueWallet](https://github.com/BlueWallet/BlueWallet) and rebuilt with Expo, HRZN Pay focuses on delivering a seamless payment experience. Whether you're sending Bitcoin to friends, paying for services, or managing your Bitcoin balance, HRZN Pay makes it feel as natural as sending money through any other payment app—but with the power and freedom of Bitcoin.
+Built as a fork of [BlueWallet](https://github.com/BlueWallet/BlueWallet) and rebuilt with Expo, HRZN focuses on delivering a seamless payment experience. Whether you're sending Bitcoin to friends, paying for services, or managing your Bitcoin balance, HRZN makes it feel as natural as sending money through any other payment app—but with the power and freedom of Bitcoin.
 
 ### Key Features
 
@@ -133,11 +133,11 @@ yarn test
 
 ## WANT TO CONTRIBUTE?
 
-Contributions are welcome! HRZN Pay is a fork of BlueWallet that's been rebuilt with Expo and redesigned as a modern payment wallet. We're building the future of Bitcoin payments, and your contributions help make Bitcoin more accessible to everyone. Feel free to submit issues and pull requests.
+Contributions are welcome! HRZN is a fork of BlueWallet that's been rebuilt with Expo and redesigned as a modern payment wallet. We're building the future of Bitcoin payments, and your contributions help make Bitcoin more accessible to everyone. Feel free to submit issues and pull requests.
 
 ## Based on BlueWallet
 
-HRZN Pay is built on top of [BlueWallet](https://github.com/BlueWallet/BlueWallet), an open-source Bitcoin wallet. We've converted it to use Expo, redesigned it for a modern payment experience, and are adding new features focused on making Bitcoin payments as simple as traditional payment apps.
+HRZN is built on top of [BlueWallet](https://github.com/BlueWallet/BlueWallet), an open-source Bitcoin wallet. We've converted it to use Expo, redesigned it for a modern payment experience, and are adding new features focused on making Bitcoin payments as simple as traditional payment apps.
 
 Original BlueWallet resources:
 * Website: [bluewallet.io](https://bluewallet.io)

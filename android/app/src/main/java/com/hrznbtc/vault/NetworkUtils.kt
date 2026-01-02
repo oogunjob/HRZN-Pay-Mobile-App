@@ -1,4 +1,4 @@
-package com.hrznbtc.hrznpay
+package com.hrznbtc.hrzn
 
 import android.content.Context
 import android.net.ConnectivityManager

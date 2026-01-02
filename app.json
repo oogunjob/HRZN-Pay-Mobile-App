@@ -1,10 +1,10 @@
 {
   "expo": {
-    "name": "HRZN Pay",
+    "name": "HRZN",
     "slug": "hrzn-pay",
     "version": "1.0.0",
     "orientation": "portrait",
-    "scheme": "com.hrznbtc.hrznpay",
+    "scheme": "com.hrznbtc.hrzn",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
     "splash": {
@@ -17,7 +17,7 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.hrznbtc.hrznpay",
+      "bundleIdentifier": "com.hrznbtc.hrzn",
       "infoPlist": {
         "NSCameraUsageDescription": "This app requires camera access to scan QR codes for wallet transactions.",
         "NSPhotoLibraryUsageDescription": "This app requires photo library access to save and load wallet QR codes.",
@@ -32,7 +32,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.hrznbtc.hrznpay",
+      "package": "com.hrznbtc.hrzn",
       "permissions": [
         "CAMERA",
         "READ_EXTERNAL_STORAGE",

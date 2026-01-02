@@ -1,11 +1,11 @@
-package com.hrznbtc.hrznpay
+package com.hrznbtc.hrzn
 
 import android.content.Context
 import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatDelegate
 
 object ThemeHelper {
-    private const val SHARED_PREF_NAME = "group.com.hrznbtc.hrznpay"
+    private const val SHARED_PREF_NAME = "group.com.hrznbtc.hrzn"
     private const val KEY_FORCE_DARK_MODE = "force_dark_mode"
 
     /**

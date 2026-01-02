@@ -6,15 +6,15 @@ export default function TabLayout() {
     <NativeTabs>
       <NativeTabs.Trigger name="index">
         <Icon sf="creditcard.fill" drawable="ic_home" />
-        <Label>Home</Label>
+        <Label>{''}</Label>
       </NativeTabs.Trigger>
       <NativeTabs.Trigger name="pay">
-        <Icon sf="bitcoinsign.circle.fill" drawable="ic_explore" />
-        <Label>Pay</Label>
+        <Icon sf="bitcoinsign" drawable="ic_explore" />
+        <Label>{''}</Label>
       </NativeTabs.Trigger>
       <NativeTabs.Trigger name="transactions">
-        <Icon sf="list.bullet" drawable="ic_explore" />
-        <Label>Transactions</Label>
+        <Icon sf="clock.fill" drawable="ic_explore" />
+        <Label>{''}</Label>
       </NativeTabs.Trigger>
     </NativeTabs>
   );

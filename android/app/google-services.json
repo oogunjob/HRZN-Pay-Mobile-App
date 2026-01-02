@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "1079769997824",
-    "project_id": "hrzn-pay",
-    "storage_bucket": "hrzn-pay.firebasestorage.app"
+    "project_number": "996946481972",
+    "project_id": "hrzn-ed0f2",
+    "storage_bucket": "hrzn-ed0f2.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1079769997824:android:b75c44cd80447aaa9c6ee5",
+        "mobilesdk_app_id": "1:996946481972:android:5daaa77c4550fa5ba84b61",
         "android_client_info": {
-          "package_name": "com.hrznbtc.hrznpay"
+          "package_name": "com.hrznbtc.hrzn"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCYBX19Q_-2U5uIACGU11S6Y6BdzxXwNTM"
+          "current_key": "AIzaSyAbgsavJzgwqlUYQuCY57XHSs-DxcopQxY"
         }
       ],
       "services": {

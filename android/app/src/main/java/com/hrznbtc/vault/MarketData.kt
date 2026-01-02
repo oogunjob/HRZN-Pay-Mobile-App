@@ -1,4 +1,4 @@
-package com.hrznbtc.hrznpay
+package com.hrznbtc.hrzn
 
 import android.util.Log
 import java.text.NumberFormat

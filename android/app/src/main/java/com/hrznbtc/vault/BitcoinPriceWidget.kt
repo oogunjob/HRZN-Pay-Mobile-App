@@ -1,4 +1,4 @@
-package com.hrznbtc.hrznpay
+package com.hrznbtc.hrzn
 
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
@@ -13,7 +13,7 @@ class BitcoinPriceWidget : AppWidgetProvider() {
 
     companion object {
         private const val TAG = "BitcoinPriceWidget"
-        private const val SHARED_PREF_NAME = "group.com.hrznbtc.hrznpay"
+        private const val SHARED_PREF_NAME = "group.com.hrznbtc.hrzn"
         
         fun updateNetworkStatus(context: Context, appWidgetIds: IntArray) {
             val isNetworkAvailable = NetworkUtils.isNetworkAvailable(context)

@@ -1,4 +1,4 @@
-package com.hrznbtc.hrznpay
+package com.hrznbtc.hrzn
 
 import android.appwidget.AppWidgetManager
 import android.content.Intent

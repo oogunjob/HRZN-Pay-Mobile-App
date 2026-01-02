@@ -158,11 +158,11 @@ export default function PayScreen() {
             {/* Header */}
             <ThemedView style={styles.header}>
               <TouchableOpacity style={styles.headerButton}>
-                <MaterialCommunityIcons name="close" size={24} color={textColor} />
+                <MaterialCommunityIcons name="qrcode-scan" size={24} color={textColor} />
               </TouchableOpacity>
               <ThemedText type="title" style={styles.headerTitle}>Pay</ThemedText>
               <TouchableOpacity style={styles.headerButton}>
-                <MaterialCommunityIcons name="qrcode-scan" size={24} color={textColor} />
+                <MaterialCommunityIcons name="cog" size={24} color={textColor} />
               </TouchableOpacity>
             </ThemedView>
 

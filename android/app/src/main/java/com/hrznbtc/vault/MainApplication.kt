@@ -1,4 +1,4 @@
-package com.hrznbtc.hrznpay
+package com.hrznbtc.hrzn
 
 import android.app.Application
 import android.content.Context
@@ -18,7 +18,7 @@ import com.facebook.react.defaults.DefaultReactNativeHost
 import com.facebook.react.soloader.OpenSourceMergedSoMapping
 import com.facebook.soloader.SoLoader
 import com.facebook.react.modules.i18nmanager.I18nUtil
-import com.hrznbtc.hrznpay.components.segmentedcontrol.CustomSegmentedControlPackage
+import com.hrznbtc.hrzn.components.segmentedcontrol.CustomSegmentedControlPackage
 
 class MainApplication : Application(), ReactApplication {
 
@@ -89,7 +89,7 @@ class MainApplication : Application(), ReactApplication {
 
     override fun onCreate() {
         super.onCreate()
-        sharedPref = getSharedPreferences("group.com.hrznbtc.hrznpay", Context.MODE_PRIVATE)
+        sharedPref = getSharedPreferences("group.com.hrznbtc.hrzn", Context.MODE_PRIVATE)
         
         // Handle clearFilesOnLaunch before registering listeners
         clearFilesIfNeeded()

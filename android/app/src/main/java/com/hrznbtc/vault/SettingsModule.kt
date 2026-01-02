@@ -1,4 +1,4 @@
-package com.hrznbtc.hrznpay
+package com.hrznbtc.hrzn
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -12,7 +12,7 @@ import java.util.UUID
 class SettingsModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
 
     private val sharedPref: SharedPreferences = reactContext.getSharedPreferences(
-        "group.com.hrznbtc.hrznpay",
+        "group.com.hrznbtc.hrzn",
         Context.MODE_PRIVATE
     )
     

@@ -43,9 +43,9 @@ export interface ToolTipMenuProps {
 }
 
 export enum HandOffActivityType {
-  ReceiveOnchain = 'com.hrznbtc.hrznpay.receiveonchain',
-  Xpub = 'com.hrznbtc.hrznpay.xpub',
-  ViewInBlockExplorer = 'com.hrznbtc.hrznpay.blockexplorer',
+  ReceiveOnchain = 'com.hrznbtc.hrzn.receiveonchain',
+  Xpub = 'com.hrznbtc.hrzn.xpub',
+  ViewInBlockExplorer = 'com.hrznbtc.hrzn.blockexplorer',
 }
 
 export interface HandOffComponentProps {

@@ -1,11 +1,11 @@
 # Define app identifiers once for reuse across lanes
 def app_identifiers
   [
-    "com.hrznbtc.hrznpay",
-    "com.hrznbtc.hrznpay.watch",
-    "com.hrznbtc.hrznpay.watch.extension",
-    "com.hrznbtc.hrznpay.Stickers",
-    "com.hrznbtc.hrznpay.MarketWidget"
+    "com.hrznbtc.hrzn",
+    "com.hrznbtc.hrzn.watch",
+    "com.hrznbtc.hrzn.watch.extension",
+    "com.hrznbtc.hrzn.Stickers",
+    "com.hrznbtc.hrzn.MarketWidget"
   ]
 end
 

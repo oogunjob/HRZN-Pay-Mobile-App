@@ -1,4 +1,4 @@
-package com.hrznbtc.hrznpay.components.segmentedcontrol
+package com.hrznbtc.hrzn.components.segmentedcontrol
 
 import android.content.Context
 import android.content.res.ColorStateList
@@ -13,7 +13,7 @@ import com.facebook.react.uimanager.events.Event
 import com.facebook.react.uimanager.UIManagerHelper
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.button.MaterialButtonToggleGroup
-import com.hrznbtc.hrznpay.R
+import com.hrznbtc.hrzn.R
 
 class CustomSegmentedControl @JvmOverloads constructor(
     context: Context,

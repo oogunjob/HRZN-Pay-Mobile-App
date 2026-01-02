@@ -1,4 +1,4 @@
-package com.hrznbtc.hrznpay
+package com.hrznbtc.hrzn
 
 import com.facebook.react.ReactPackage
 import com.facebook.react.bridge.NativeModule

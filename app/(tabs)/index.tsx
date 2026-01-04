@@ -3,6 +3,7 @@ import { StyleSheet, TouchableOpacity, StatusBar, Dimensions, View, Text, Scroll
 import { useColorScheme } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 import { ThemedView } from '@/components/themed-view';
 import { ThemedText } from '@/components/themed-text';
 import { useThemeColor } from '@/hooks/use-theme-color';
@@ -21,6 +22,7 @@ const BTC_PRICE_USD = 42350; // Mock BTC price
 export default function HomeScreen() {
   const colorScheme = useColorScheme();
   const insets = useSafeAreaInsets();
+  const router = useRouter();
   const [wallets, setWallets] = useState(MOCK_WALLETS);
   const [showAllWallets, setShowAllWallets] = useState(false);
 
@@ -53,7 +55,10 @@ export default function HomeScreen() {
             <MaterialCommunityIcons name="chart-timeline-variant" size={24} color={textColor} />
           </TouchableOpacity>
           <ThemedText type="title" style={styles.headerTitle}>Home</ThemedText>
-          <TouchableOpacity style={styles.headerButton}>
+          <TouchableOpacity 
+            style={styles.headerButton}
+            onPress={() => router.push('/settings')}
+          >
             <MaterialCommunityIcons name="cog" size={24} color={textColor} />
           </TouchableOpacity>
         </ThemedView>

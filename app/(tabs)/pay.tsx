@@ -3,6 +3,7 @@ import { StyleSheet, TouchableOpacity, StatusBar, Dimensions, View, Text } from 
 import { useColorScheme } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useRouter } from 'expo-router';
 import AnimatedBitcoinInput from '@/components/AnimatedBitcoinInput';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { ThemedView } from '@/components/themed-view';
@@ -85,6 +86,7 @@ const PassCodeKeyboard = ({ onPress, onDecimalPress, textColor, iconColor }: {
 export default function PayScreen() {
   const colorScheme = useColorScheme();
   const insets = useSafeAreaInsets();
+  const router = useRouter();
   const [amount, setAmount] = useState('0');
   const inputRef = useRef<any>(null);
   const [currency, setCurrency] = useState<'BTC' | 'USD'>('BTC');
@@ -161,7 +163,10 @@ export default function PayScreen() {
                 <MaterialCommunityIcons name="qrcode-scan" size={24} color={textColor} />
               </TouchableOpacity>
               <ThemedText type="title" style={styles.headerTitle}>Pay</ThemedText>
-              <TouchableOpacity style={styles.headerButton}>
+              <TouchableOpacity 
+                style={styles.headerButton}
+                onPress={() => router.push('/settings')}
+              >
                 <MaterialCommunityIcons name="cog" size={24} color={textColor} />
               </TouchableOpacity>
             </ThemedView>

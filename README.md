@@ -26,7 +26,7 @@ Built as a fork of [BlueWallet](https://github.com/BlueWallet/BlueWallet) and re
 * **Built with Expo** - Modern development stack for rapid iteration and cross-platform compatibility
 
 
-<img src="https://i.imgur.com/hHYJnMj.png" width="100%">
+<img src="assets/screenshots/screenshots.png" width="100%">
 
 
 ## BUILD & RUN IT

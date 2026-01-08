@@ -1,3 +1,5 @@
+import '../shim';
+
 import React, { createContext, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { InteractionManager, LayoutAnimation } from 'react-native';
 import { BlueApp as BlueAppClass, LegacyWallet, TCounterpartyMetadata, TTXMetadata, WatchOnlyWallet } from '../class';

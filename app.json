@@ -86,8 +86,9 @@
       "expo-localization"
     ],
     "extra": {
+      "router": {},
       "eas": {
-        "projectId": "862b2a7d-1a49-4666-8766-3f0d0afbe220"
+        "projectId": "4ad84fe8-e0f0-4189-bf64-19862b8f102a"
       }
     },
     "owner": "hrznbtc"

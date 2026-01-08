@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { StyleSheet, TouchableOpacity, StatusBar, Dimensions, View, Text, ScrollView } from 'react-native';
 import { useColorScheme } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -7,24 +7,26 @@ import { useRouter } from 'expo-router';
 import { ThemedView } from '@/components/themed-view';
 import { ThemedText } from '@/components/themed-text';
 import { useThemeColor } from '@/hooks/use-theme-color';
+import { useStorage } from '@/providers';
+import { satoshiToLocalCurrency, satoshiToBTC } from '@/blue_modules/currency';
 
 const { width } = Dimensions.get('window');
 
-// Mock data for wallets
-const MOCK_WALLETS = [
-  { id: '1', name: 'Main Wallet', balance: 0.05234, type: 'HD', color: '#f97316', included: true },
-  { id: '2', name: 'Savings', balance: 0.15000, type: 'HD', color: '#8b5cf6', included: true },
-  { id: '3', name: 'Trading', balance: 0.00891, type: 'Lightning', color: '#3b82f6', included: false },
-];
-
-const BTC_PRICE_USD = 91000; // Mock BTC price
+// Wallet type to display config mapping
+const WALLET_TYPE_CONFIG: Record<string, { color: string; icon: string; displayName: string }> = {
+  'HDsegwitBech32': { color: '#f97316', icon: 'bitcoin', displayName: 'HD Segwit' },
+  'HDlegacyP2PKH': { color: '#8b5cf6', icon: 'bitcoin', displayName: 'HD Legacy' },
+  'HDsegwitP2SH': { color: '#3b82f6', icon: 'bitcoin', displayName: 'HD Segwit' },
+  'HDtaproot': { color: '#10b981', icon: 'bitcoin', displayName: 'Taproot' },
+  'lightningCustodianWallet': { color: '#eab308', icon: 'flash', displayName: 'Lightning' },
+  'default': { color: '#6366f1', icon: 'wallet', displayName: 'Wallet' },
+};
 
 export default function HomeScreen() {
   const colorScheme = useColorScheme();
   const insets = useSafeAreaInsets();
   const router = useRouter();
-  const [wallets, setWallets] = useState(MOCK_WALLETS);
-  const [showAllWallets, setShowAllWallets] = useState(false);
+  const { wallets } = useStorage();
 
   // Theme colors
   const backgroundColor = useThemeColor({}, 'background');
@@ -33,16 +35,13 @@ export default function HomeScreen() {
   const cardBg = colorScheme === 'dark' ? '#1a1a1a' : '#f5f5f5';
   const borderColor = colorScheme === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)';
 
-  const totalBalance = wallets
-    .filter(w => w.included)
-    .reduce((sum, w) => sum + w.balance, 0);
+  // Calculate total balance in satoshis
+  const totalBalanceSats = wallets.reduce((sum, wallet) => sum + wallet.getBalance(), 0);
+  const totalBalanceBTC = satoshiToBTC(totalBalanceSats);
 
-  const totalUSD = totalBalance * BTC_PRICE_USD;
-
-  const toggleWalletInclusion = (id: string) => {
-    setWallets(wallets.map(w => 
-      w.id === id ? { ...w, included: !w.included } : w
-    ));
+  // Get wallet config for display
+  const getWalletConfig = (walletType: string) => {
+    return WALLET_TYPE_CONFIG[walletType] || WALLET_TYPE_CONFIG.default;
   };
 
   return (
@@ -78,10 +77,10 @@ export default function HomeScreen() {
             </ThemedText>
             <View style={styles.balanceValuesContainer}>
               <ThemedText style={[styles.btcBalance, { color: textColor }]}>
-                ₿ {totalBalance.toFixed(8)}
+                ₿ {totalBalanceBTC}
               </ThemedText>
               <ThemedText style={[styles.usdBalance, { color: secondaryText }]}>
-                ${totalUSD.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                {satoshiToLocalCurrency(totalBalanceSats)}
               </ThemedText>
             </View>
           </ThemedView>
@@ -92,49 +91,57 @@ export default function HomeScreen() {
               <ThemedText style={[styles.sectionTitle, { color: textColor }]}>
                 Wallets
               </ThemedText>
-              <TouchableOpacity onPress={() => setShowAllWallets(!showAllWallets)}>
+              <TouchableOpacity onPress={() => router.push('/manage-wallets')}>
                 <Text style={[styles.sectionAction, { color: '#f97316' }]}>
-                  {showAllWallets ? 'Show Less' : 'Manage'}
+                  Manage
                 </Text>
               </TouchableOpacity>
             </View>
 
-            {wallets.map((wallet) => (
-              <TouchableOpacity
-                key={wallet.id}
-                style={[styles.walletCard, { backgroundColor: cardBg, borderColor }]}
-                onLongPress={() => toggleWalletInclusion(wallet.id)}
-              >
-                <View style={styles.walletLeft}>
-                  <View style={[styles.walletIcon, { backgroundColor: wallet.color }]}>
-                    <MaterialCommunityIcons 
-                      name={wallet.type === 'Lightning' ? 'flash' : 'bitcoin'} 
-                      size={20} 
-                      color="#fff" 
-                    />
+            {wallets.map((wallet) => {
+              const config = getWalletConfig(wallet.type);
+              const balanceSats = wallet.getBalance();
+              const balanceBTC = satoshiToBTC(balanceSats);
+
+              return (
+                <TouchableOpacity
+                  key={wallet.getID()}
+                  style={[styles.walletCard, { backgroundColor: cardBg, borderColor }]}
+                >
+                  <View style={styles.walletLeft}>
+                    <View style={[styles.walletIcon, { backgroundColor: config.color }]}>
+                      <MaterialCommunityIcons
+                        name={config.icon as any}
+                        size={20}
+                        color="#fff"
+                      />
+                    </View>
+                    <View style={styles.walletInfo}>
+                      <Text style={[styles.walletName, { color: textColor }]}>
+                        {wallet.getLabel()}
+                      </Text>
+                      <Text style={[styles.walletType, { color: secondaryText }]}>
+                        {config.displayName}
+                      </Text>
+                    </View>
                   </View>
-                  <View style={styles.walletInfo}>
-                    <Text style={[styles.walletName, { color: textColor }]}>
-                      {wallet.name}
+                  <View style={styles.walletRight}>
+                    <Text style={[styles.walletBalance, { color: textColor }]}>
+                      ₿ {balanceBTC}
                     </Text>
-                    <Text style={[styles.walletType, { color: secondaryText }]}>
-                      {wallet.type}
+                    <Text style={[styles.walletBalanceUSD, { color: secondaryText }]}>
+                      {satoshiToLocalCurrency(balanceSats)}
                     </Text>
                   </View>
-                </View>
-                <View style={styles.walletRight}>
-                  <Text style={[styles.walletBalance, { color: textColor }]}>
-                    ₿ {wallet.balance.toFixed(5)}
-                  </Text>
-                  <Text style={[styles.walletBalanceUSD, { color: secondaryText }]}>
-                    ${(wallet.balance * BTC_PRICE_USD).toFixed(2)}
-                  </Text>
-                </View>
-              </TouchableOpacity>
-            ))}
+                </TouchableOpacity>
+              );
+            })}
 
             {/* Add Wallet Button */}
-            <TouchableOpacity style={[styles.addWalletBtn, { borderColor, borderStyle: 'dashed' }]}>
+            <TouchableOpacity
+              style={[styles.addWalletBtn, { borderColor, borderStyle: 'dashed' }]}
+              onPress={() => router.push('/add-wallet')}
+            >
               <MaterialCommunityIcons name="plus" size={24} color={secondaryText} style={{ marginBottom: 4 }} />
               <Text style={[styles.addWalletText, { color: secondaryText }]}>
                 Add Wallet

@@ -16,6 +16,7 @@ const config = getDefaultConfig(__dirname);
 
 // Add custom resolver configuration
 config.resolver.extraNodeModules = {
+  buffer: require.resolve('buffer'),
   stream: require.resolve('stream-browserify'),
   crypto: require.resolve('crypto-browserify'),
   net: require.resolve('react-native-tcp-socket'),

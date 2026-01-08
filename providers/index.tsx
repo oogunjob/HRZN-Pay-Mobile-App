@@ -1,3 +1,5 @@
+import '../shim';
+
 import React from 'react';
 import { StorageProvider } from './StorageProvider';
 import { SettingsProvider } from './SettingsProvider';

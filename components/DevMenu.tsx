@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { DevSettings, Alert, Platform, AlertButton } from 'react-native';
-import { useStorage } from '../hooks/context/useStorage';
+import { useStorage } from '@/providers';
 import { HDSegwitBech32Wallet, WatchOnlyWallet } from '../class';
 import Clipboard from '@react-native-clipboard/clipboard';
 import { TWallet } from '../class/wallets/types';
@@ -69,10 +69,11 @@ const showAlertWithWalletOptions = (
 };
 
 const DevMenu: React.FC = () => {
-  const { wallets, addWallet } = useStorage();
+  const storage = useStorage();
 
   useEffect(() => {
-    if (__DEV__) {
+    if (__DEV__ && storage) {
+      const { wallets, addWallet } = storage;
       // Clear existing Dev Menu items to prevent duplication
       DevSettings.addMenuItem('Reset Dev Menu', () => {
         DevSettings.reload();
@@ -159,7 +160,7 @@ const DevMenu: React.FC = () => {
         });
       });
     }
-  }, [wallets, addWallet]);
+  }, [storage]);
 
   return null;
 };

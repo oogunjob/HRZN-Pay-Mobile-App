@@ -1,5 +1,6 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, useColorScheme } from 'react-native';
+import { ThemedText } from '@/components/themed-text';
 
 import { useTheme } from './themes';
 import { useLocale } from '@react-navigation/native';
@@ -8,31 +9,48 @@ const SeedWords = ({ seed }: { seed: string }) => {
   const words = seed.split(/\s/);
   const { colors } = useTheme();
   const { direction } = useLocale();
+  const colorScheme = useColorScheme();
 
-  const stylesHook = StyleSheet.create({
-    word: {
-      backgroundColor: colors.inputBackgroundColor,
-    },
-    wortText: {
-      color: colors.labelText,
-    },
-    secret: {
-      flexDirection: direction === 'rtl' ? 'row-reverse' : 'row',
-    },
-  });
+  const borderColor = colorScheme === 'dark' ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.15)';
+  const backgroundColor = colorScheme === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.02)';
+
+  // Split words into two columns
+  const halfLength = Math.ceil(words.length / 2);
+  const leftColumn = words.slice(0, halfLength);
+  const rightColumn = words.slice(halfLength);
 
   return (
-    <View style={[styles.secret, stylesHook.secret]}>
-      {words.map((secret, index) => {
-        const text = `${index + 1}. ${secret}  `;
-        return (
-          <View style={[styles.word, stylesHook.word]} key={index}>
-            <Text style={[styles.wortText, stylesHook.wortText]} textBreakStrategy="simple">
-              {text}
-            </Text>
-          </View>
-        );
-      })}
+    <View>
+      <View style={styles.columnsContainer}>
+        {/* Left Column */}
+        <View style={styles.column}>
+          {leftColumn.map((word, index) => (
+            <View style={[styles.word, { borderColor, backgroundColor }]} key={index}>
+              <ThemedText style={styles.wordNumber}>
+                {index + 1}.
+              </ThemedText>
+              <ThemedText style={styles.wordText}>
+                {word}
+              </ThemedText>
+            </View>
+          ))}
+        </View>
+
+        {/* Right Column */}
+        <View style={styles.column}>
+          {rightColumn.map((word, index) => (
+            <View style={[styles.word, { borderColor, backgroundColor }]} key={index + halfLength}>
+              <ThemedText style={styles.wordNumber}>
+                {index + halfLength + 1}.
+              </ThemedText>
+              <ThemedText style={styles.wordText}>
+                {word}
+              </ThemedText>
+            </View>
+          ))}
+        </View>
+      </View>
+
       <Text style={styles.hiddenText} testID="Secret">
         {seed}
       </Text>
@@ -41,23 +59,34 @@ const SeedWords = ({ seed }: { seed: string }) => {
 };
 
 const styles = StyleSheet.create({
+  columnsContainer: {
+    flexDirection: 'row',
+    gap: 12,
+    width: '100%',
+  },
+  column: {
+    flex: 1,
+    gap: 10,
+    width: '50%',
+  },
   word: {
-    marginRight: 8,
-    marginBottom: 8,
-    paddingTop: 6,
-    paddingBottom: 6,
-    paddingLeft: 8,
-    paddingRight: 8,
-    borderRadius: 4,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 12,
+    paddingHorizontal: 14,
+    borderRadius: 12,
+    borderWidth: 1,
+    gap: 8,
   },
-  wortText: {
-    fontWeight: 'bold',
-    textAlign: 'left',
-    fontSize: 17,
+  wordNumber: {
+    fontSize: 15,
+    fontWeight: '600',
+    minWidth: 26,
   },
-  secret: {
-    flexWrap: 'wrap',
-    justifyContent: 'center',
+  wordText: {
+    fontSize: 16,
+    fontWeight: '600',
+    flexShrink: 1,
   },
   hiddenText: {
     height: 0,

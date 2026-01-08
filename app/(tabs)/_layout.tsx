@@ -16,10 +16,6 @@ export default function TabLayout() {
         <Icon sf="bitcoinsign" drawable="ic_explore" />
         <Label>{''}</Label>
       </NativeTabs.Trigger>
-      <NativeTabs.Trigger name="transactions">
-        <Icon sf="clock.fill" drawable="ic_explore" />
-        <Label>{''}</Label>
-      </NativeTabs.Trigger>
     </NativeTabs>
   );
 }

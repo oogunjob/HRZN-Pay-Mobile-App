@@ -1,3 +1,5 @@
+import '../shim';
+
 export * from './blue-app';
 export * from './hd-segwit-bech32-transaction';
 export * from './multisig-cosigner';

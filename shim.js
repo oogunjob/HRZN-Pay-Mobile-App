@@ -1,6 +1,14 @@
 /* global __DEV__, localStorage */
+
+// Critical imports - order matters!
+import { Buffer } from 'buffer';
+import 'react-native-get-random-values';
 import 'text-encoding';
-if (typeof Buffer === 'undefined') global.Buffer = require('buffer').Buffer;
+
+// Set up Buffer globally - must happen before crypto operations
+global.Buffer = Buffer;
+
+// Set up global variables
 if (typeof __dirname === 'undefined') global.__dirname = '/';
 if (typeof __filename === 'undefined') global.__filename = '';
 if (typeof process === 'undefined') {

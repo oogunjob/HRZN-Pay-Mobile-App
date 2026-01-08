@@ -1,7 +1,5 @@
 import { useEffect, useState } from 'react';
 import { useStorage } from '@/providers';
-import { initCurrencyDaemon } from '@/blue_modules/currency';
-import * as BlueElectrum from '@/blue_modules/BlueElectrum';
 
 export const useAppInitialization = () => {
   const { walletsInitialized, setWalletsInitialized, startAndDecrypt, isStorageEncrypted } = useStorage();
@@ -14,17 +12,7 @@ export const useAppInitialization = () => {
         setIsInitializing(true);
         setInitializationError(null);
 
-        // Step 1: Initialize currency daemon (fetch exchange rates)
-        console.log('[AppInit] Initializing currency daemon...');
-        try {
-          await initCurrencyDaemon();
-          console.log('[AppInit] Currency daemon initialized');
-        } catch (error: any) {
-          console.warn('[AppInit] Currency daemon initialization failed:', error?.message || error);
-          // Don't block app launch if currency fails
-        }
-
-        // Step 2: Check if storage is encrypted and unlock wallets
+        // Step 1: Check if storage is encrypted and unlock wallets
         console.log('[AppInit] Checking wallet storage...');
         try {
           const encrypted = await isStorageEncrypted();
@@ -56,7 +44,7 @@ export const useAppInitialization = () => {
           setWalletsInitialized(false);
         }
 
-        // Step 3: Connect to Electrum (will be handled by SettingsProvider when walletsInitialized changes)
+        // Step 2: Connect to Electrum (will be handled by SettingsProvider when walletsInitialized changes)
         console.log('[AppInit] Initialization complete');
       } catch (error: any) {
         console.error('[AppInit] Initialization error:', error?.message || error);

@@ -29,6 +29,14 @@ export default function AboutScreen() {
     Linking.openURL('https://instagram.com/hrznbtc');
   };
 
+  const handleYoutubePress = () => {
+    Linking.openURL('https://youtube.com/@hrznbtc');
+  };
+
+  const handleTiktokPress = () => {
+    Linking.openURL('https://tiktok.com/@hrznbtc');
+  };
+
   const handleGithubPress = () => {
     Linking.openURL('https://github.com/oogunjob/HRZN-Mobile-App');
   };
@@ -67,6 +75,20 @@ export default function AboutScreen() {
       color: '#E4405F',
       handle: '@hrznbtc',
       onPress: handleInstagramPress,
+    },
+    {
+      name: 'YouTube',
+      icon: 'youtube',
+      color: '#FF0000',
+      handle: '@hrznbtc',
+      onPress: handleYoutubePress,
+    },
+    {
+      name: 'TikTok',
+      icon: 'music-note',
+      color: '#EE1D52',
+      handle: '@hrznbtc',
+      onPress: handleTiktokPress,
     },
     {
       name: 'GitHub',

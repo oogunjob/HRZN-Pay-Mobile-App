@@ -52,8 +52,8 @@ node --version && yarn --version
 1. Clone the repository:
 
 ```bash
-git clone <repository-url>
-cd HRZN-Pay-Mobile-App
+git clone https://github.com/oogunjob/HRZN-Mobile-App.git
+cd HRZN-Mobile-App
 ```
 
 2. Install dependencies using Yarn:

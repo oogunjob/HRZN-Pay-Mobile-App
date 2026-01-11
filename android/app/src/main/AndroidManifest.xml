@@ -60,7 +60,7 @@
         <action android:name="android.intent.action.VIEW"/>
         <category android:name="android.intent.category.DEFAULT"/>
         <category android:name="android.intent.category.BROWSABLE"/>
-        <data android:scheme="exp+hrzn-pay"/>
+        <data android:scheme="exp+hrzn"/>
         <data android:scheme="com.hrznbtc.hrzn"/>
       </intent-filter>
       <intent-filter>

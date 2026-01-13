@@ -11,7 +11,7 @@ import { Button } from '../../components/Button';
 import { useTheme } from '../../components/themes';
 import loc from '../../loc';
 import triggerHapticFeedback, { HapticFeedbackTypes } from '../../blue_modules/hapticFeedback';
-import { GROUP_IO_BLUEWALLET } from '../../blue_modules/currency';
+import { GROUP_IO_HRZN } from '../../blue_modules/currency';
 import { clearLNDHub, getLNDHub, setLNDHub } from '../../helpers/lndHub';
 import { DetailViewStackParamList } from '../../navigation/DetailViewStackParamList';
 import { useExtendedNavigation } from '../../hooks/useExtendedNavigation';
@@ -77,7 +77,7 @@ const LightningSettings: React.FC = () => {
   }, [params?.url]);
 
   const setLndhubURI = (value: string) => {
-    // in case user scans a QR with a deeplink like `bluewallet:setlndhuburl?url=https%3A%2F%2Flndhub.herokuapp.com`
+    // in case user scans a QR with a deeplink like `hrzn:setlndhuburl?url=https%3A%2F%2Flndhub.herokuapp.com`
     const setLndHubUrl = DeeplinkSchemaMatch.getUrlFromSetLndhubUrlAction(value);
 
     setURI(typeof setLndHubUrl === 'string' ? setLndHubUrl.trim() : value.trim());
@@ -86,7 +86,7 @@ const LightningSettings: React.FC = () => {
     setIsLoading(true);
     let normalizedURI;
     try {
-      await DefaultPreference.setName(GROUP_IO_BLUEWALLET);
+      await DefaultPreference.setName(GROUP_IO_HRZN);
       if (URI) {
         normalizedURI = new URL(URI.replace(/([^:]\/)\/+/g, '$1')).toString();
         await LightningCustodianWallet.isValidNodeAddress(normalizedURI);

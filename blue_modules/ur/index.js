@@ -10,7 +10,7 @@ import {
   CryptoAccount,
   Bytes,
 } from '@keystonehq/bc-ur-registry/dist';
-import { decodeUR as origDecodeUr, encodeUR as origEncodeUR, extractSingleWorkload as origExtractSingleWorkload } from '../bc-ur/dist';
+import { decodeUR as origDecodeUr, encodeUR as origEncodeUR, extractSingleWorkload as origExtractSingleWorkload } from '../bc-ur';
 import { MultisigCosigner, MultisigHDWallet } from '../../class';
 import { Psbt } from 'bitcoinjs-lib';
 import AsyncStorage from '@react-native-async-storage/async-storage';

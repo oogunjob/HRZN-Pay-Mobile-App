@@ -97,6 +97,7 @@ android/app/.project
 # Expo
 .expo
 dist/
+!blue_modules/*/dist/
 web-build/
 
 ios/

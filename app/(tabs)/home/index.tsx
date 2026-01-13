@@ -107,6 +107,8 @@ export default function HomeScreen() {
                 <TouchableOpacity
                   key={wallet.getID()}
                   style={[styles.walletCard, { backgroundColor: cardBg, borderColor }]}
+                  onPress={() => router.push(`/wallet/${wallet.getID()}`)}
+                  activeOpacity={0.7}
                 >
                   <View style={styles.walletLeft}>
                     <View style={[styles.walletIcon, { backgroundColor: config.color }]}>

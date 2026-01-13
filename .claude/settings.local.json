@@ -1,7 +1,13 @@
 {
   "permissions": {
     "allow": [
-      "Bash(ls:*)"
+      "Bash(ls:*)",
+      "Bash(cat:*)",
+      "Bash(grep:*)",
+      "Bash(git check-ignore:*)",
+      "Bash(npm view:*)",
+      "Bash(npx expo-doctor:*)",
+      "Bash(npm ls:*)"
     ]
   }
 }

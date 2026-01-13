@@ -26,6 +26,7 @@ export default function RootLayout() {
           <Stack.Screen name="settings" options={{ headerShown: false, presentation: 'fullScreenModal' }} />
           <Stack.Screen name="add-wallet" options={{ headerShown: false, presentation: 'fullScreenModal' }} />
           <Stack.Screen name="manage-wallets" options={{ headerShown: false, presentation: 'fullScreenModal' }} />
+          <Stack.Screen name="wallet" options={{ headerShown: true, headerBackTitle: 'Home' }} />
         </Stack>
         <StatusBar style="auto" />
       </ThemeProvider>

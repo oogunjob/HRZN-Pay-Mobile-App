@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import {
   StyleSheet,
   TouchableOpacity,
@@ -10,6 +10,9 @@ import {
   ActivityIndicator,
   Alert,
   BackHandler,
+  LayoutAnimation,
+  Platform,
+  UIManager,
 } from 'react-native';
 import { useColorScheme } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -20,11 +23,25 @@ import { ThemedView } from '@/components/themed-view';
 import { ThemedText } from '@/components/themed-text';
 import { useThemeColor } from '@/hooks/use-theme-color';
 import { useStorage } from '@/providers';
-import { HDSegwitBech32Wallet, HDLegacyP2PKHWallet, HDTaprootWallet } from '@/class';
+import { HDSegwitBech32Wallet, HDLegacyP2PKHWallet, HDTaprootWallet, WatchOnlyWallet } from '@/class';
 import SeedWords from '@/components/SeedWords';
+import startImport, { TImport } from '@/class/wallet-import';
+import type { TWallet } from '@/class/wallets/types';
+
+// Enable LayoutAnimation for Android
+if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
+  UIManager.setLayoutAnimationEnabledExperimental(true);
+}
 
 type WalletType = 'HD Segwit (Bech32)' | 'HD Legacy' | 'HD Taproot';
-type Step = 'create' | 'backup';
+type Step = 'create' | 'backup' | 'import-select-words' | 'import-enter-seed' | 'import-discovery';
+type SeedWordCount = 12 | 20 | 24;
+
+interface DiscoveredWallet {
+  wallet: TWallet;
+  subtitle: string;
+  id: string;
+}
 
 interface WalletTypeOption {
   type: WalletType;
@@ -64,13 +81,22 @@ export default function AddWalletScreen() {
   const colorScheme = useColorScheme();
   const insets = useSafeAreaInsets();
   const router = useRouter();
-  const { addWallet, saveToDisk, wallets } = useStorage();
+  const { addWallet, saveToDisk, wallets, addAndSaveWallet } = useStorage();
 
   const [step, setStep] = useState<Step>('create');
   const [walletName, setWalletName] = useState('');
   const [selectedType, setSelectedType] = useState<WalletType>('HD Segwit (Bech32)');
   const [isCreating, setIsCreating] = useState(false);
   const [createdWalletID, setCreatedWalletID] = useState<string | null>(null);
+
+  // Import wallet states
+  const [seedWordCount, setSeedWordCount] = useState<SeedWordCount>(12);
+  const [seedWords, setSeedWords] = useState<string[]>([]);
+  const [isDiscovering, setIsDiscovering] = useState(false);
+  const [discoveredWallets, setDiscoveredWallets] = useState<DiscoveredWallet[]>([]);
+  const [selectedWalletIndex, setSelectedWalletIndex] = useState(0);
+  const [discoveryProgress, setDiscoveryProgress] = useState<string>('');
+  const importTask = useRef<TImport | null>(null);
 
   // Theme colors
   const textColor = useThemeColor({}, 'text');
@@ -114,6 +140,15 @@ export default function AddWalletScreen() {
           { text: 'I Saved It', onPress: () => router.back(), style: 'destructive' },
         ]
       );
+    } else if (step.startsWith('import-')) {
+      // Stop any ongoing import task
+      importTask.current?.stop();
+      // Reset import state and go back to create step
+      setSeedWords([]);
+      setDiscoveredWallets([]);
+      setSelectedWalletIndex(0);
+      setDiscoveryProgress('');
+      setStep('create');
     } else {
       router.back();
     }
@@ -176,8 +211,228 @@ export default function AddWalletScreen() {
   }, [router]);
 
   const handleImportWallet = () => {
-    Alert.alert('Coming Soon', 'Import wallet feature will be available soon!');
+    // Initialize seed words array based on count and reset wallet name
+    setSeedWords(Array(seedWordCount).fill(''));
+    setWalletName(''); // Reset wallet name for import
+    setStep('import-select-words');
   };
+
+  const handleSeedWordCountSelect = (count: SeedWordCount) => {
+    setSeedWordCount(count);
+    setSeedWords(Array(count).fill(''));
+  };
+
+  const handleContinueToSeedInput = () => {
+    setStep('import-enter-seed');
+  };
+
+  const handleSeedWordChange = (index: number, value: string) => {
+    const newSeedWords = [...seedWords];
+    // Normalize: lowercase and trim
+    newSeedWords[index] = value.toLowerCase().trim();
+    setSeedWords(newSeedWords);
+  };
+
+  const handlePasteSeedPhrase = async () => {
+    try {
+      const Clipboard = require('@react-native-clipboard/clipboard').default;
+      const text = await Clipboard.getString();
+      if (text) {
+        const words = text.trim().toLowerCase().split(/\s+/);
+        if (words.length === seedWordCount) {
+          setSeedWords(words);
+        } else {
+          Alert.alert(
+            'Invalid Seed Phrase',
+            `Expected ${seedWordCount} words but got ${words.length} words.`
+          );
+        }
+      }
+    } catch (error) {
+      console.error('Failed to paste:', error);
+    }
+  };
+
+  const isValidSeedPhrase = useCallback(() => {
+    // Check all words are filled
+    return seedWords.every(word => word.length > 0);
+  }, [seedWords]);
+
+  const handleStartDiscovery = useCallback(() => {
+    if (!isValidSeedPhrase()) {
+      Alert.alert('Incomplete', 'Please enter all seed words.');
+      return;
+    }
+
+    const seedPhrase = seedWords.join(' ');
+
+    // Validate the mnemonic
+    const testWallet = new HDSegwitBech32Wallet();
+    testWallet.setSecret(seedPhrase);
+    if (!testWallet.validateMnemonic()) {
+      Alert.alert('Invalid Seed Phrase', 'The seed phrase you entered is not valid. Please check your words and try again.');
+      return;
+    }
+
+    // Check if a wallet with this seed phrase already exists
+    const existingWallet = wallets.find(w => {
+      try {
+        const existingSecret = w.getSecret();
+        // Normalize both secrets for comparison (lowercase, trim, single spaces)
+        const normalizedExisting = existingSecret?.toLowerCase().trim().replace(/\s+/g, ' ');
+        const normalizedNew = seedPhrase.toLowerCase().trim().replace(/\s+/g, ' ');
+        return normalizedExisting === normalizedNew;
+      } catch {
+        return false;
+      }
+    });
+
+    if (existingWallet) {
+      Alert.alert(
+        'Wallet Already Exists',
+        `A wallet with this seed phrase already exists: "${existingWallet.getLabel()}". You cannot import the same wallet twice.`
+      );
+      return;
+    }
+
+    setStep('import-discovery');
+    setIsDiscovering(true);
+    setDiscoveredWallets([]);
+    setSelectedWalletIndex(0);
+
+    const onProgress = (progress: string) => {
+      setDiscoveryProgress(progress);
+    };
+
+    const onWallet = (wallet: TWallet) => {
+      LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+      const id = wallet.getID();
+      let subtitle: string | undefined;
+
+      try {
+        if (wallet.type === WatchOnlyWallet.type) {
+          subtitle = wallet.getAddress();
+        } else {
+          subtitle = (wallet as any).getDerivationPath?.() || '';
+        }
+      } catch (e) {
+        subtitle = '';
+      }
+
+      setDiscoveredWallets(prev => {
+        // Avoid duplicates
+        if (prev.some(w => w.id === id)) return prev;
+        return [...prev, { wallet, subtitle: subtitle || '', id }];
+      });
+    };
+
+    const onPassword = async (title: string, text: string): Promise<string> => {
+      return new Promise((resolve, reject) => {
+        if (Platform.OS === 'ios') {
+          Alert.prompt(
+            title || 'Password Required',
+            text || 'Enter passphrase',
+            [
+              { text: 'Cancel', style: 'cancel', onPress: () => reject(new Error('Cancel Pressed')) },
+              { text: 'OK', onPress: (password?: string) => resolve(password || '') },
+            ],
+            'secure-text'
+          );
+        } else {
+          // For Android, we'll use a simple alert for now
+          // In production, you'd want to use a modal with TextInput
+          Alert.alert(
+            title || 'Password Required',
+            text || 'Passphrase input is not supported on this platform yet.',
+            [
+              { text: 'Cancel', style: 'cancel', onPress: () => reject(new Error('Cancel Pressed')) },
+              { text: 'Continue without passphrase', onPress: () => resolve('') },
+            ]
+          );
+        }
+      });
+    };
+
+    importTask.current = startImport(
+      seedPhrase,
+      false, // askPassphrase
+      false, // searchAccounts
+      false, // offline
+      onProgress,
+      onWallet,
+      onPassword
+    );
+
+    importTask.current.promise
+      .then(({ cancelled, wallets: foundWallets }) => {
+        if (cancelled) return;
+
+        LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+        setIsDiscovering(false);
+
+        if (foundWallets.length === 0) {
+          // If no wallets found with history, still show the default HD wallet
+          Alert.alert(
+            'No Wallet History Found',
+            'No transaction history was found, but you can still import the wallet.'
+          );
+        }
+      })
+      .catch((error) => {
+        console.error('Import error:', error);
+        setIsDiscovering(false);
+        if (error.message !== 'Cancel Pressed' && error.message !== 'Discovery stopped') {
+          Alert.alert('Import Error', error.message);
+        }
+      });
+
+    return () => {
+      importTask.current?.stop();
+    };
+  }, [seedWords, isValidSeedPhrase]);
+
+  const handleImportSelectedWallet = useCallback(async () => {
+    if (discoveredWallets.length === 0) return;
+
+    const selectedWallet = discoveredWallets[selectedWalletIndex].wallet;
+
+    // Check if this wallet already exists (by ID)
+    if (wallets.some(w => w.getID() === selectedWallet.getID())) {
+      Alert.alert('Wallet Already Exists', 'This wallet has been previously imported.');
+      return;
+    }
+
+    // Set the wallet label - use custom name if provided, otherwise use default
+    const customName = walletName.trim();
+    const finalLabel = customName || getNextDefaultWalletName();
+
+    if (customName && walletNameExists(customName)) {
+      Alert.alert(
+        'Name Already Exists',
+        `A wallet named "${customName}" already exists. Please choose a different name.`
+      );
+      return;
+    }
+
+    selectedWallet.setLabel(finalLabel);
+
+    try {
+      setIsCreating(true);
+
+      // Use addWallet and saveToDisk directly to preserve our custom label
+      // (addAndSaveWallet would overwrite "Wallet" label with "Imported...")
+      addWallet(selectedWallet);
+      await saveToDisk();
+
+      Alert.alert('Success', 'Wallet imported successfully!');
+      router.back();
+    } catch (error: any) {
+      console.error('Error importing wallet:', error);
+      Alert.alert('Error', error.message || 'Failed to import wallet');
+    } finally {
+      setIsCreating(false);
+    }
+  }, [discoveredWallets, selectedWalletIndex, wallets, walletName, walletNameExists, getNextDefaultWalletName, addWallet, saveToDisk, router]);
 
   // Render Create Wallet Step
   const renderCreateStep = () => (
@@ -401,6 +656,435 @@ export default function AddWalletScreen() {
     );
   };
 
+  // Render Import Select Words Step
+  const renderImportSelectWordsStep = () => {
+    const wordCountOptions: { count: SeedWordCount; label: string }[] = [
+      { count: 12, label: '12 Words' },
+      { count: 20, label: '20 Words' },
+      { count: 24, label: '24 Words' },
+    ];
+
+    return (
+      <ScrollView
+        style={styles.content}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.scrollContentContainer}
+      >
+        {/* Info Card */}
+        <View style={[styles.infoCardImport, { backgroundColor: '#3b82f620', borderColor: '#3b82f6' }]}>
+          <View style={styles.warningIcon}>
+            <MaterialCommunityIcons name="key-variant" size={36} color="#3b82f6" />
+          </View>
+          <View style={styles.warningContent}>
+            <Text style={[styles.warningTitle, { color: '#3b82f6' }]}>
+              Import Your Wallet
+            </Text>
+            <Text style={[styles.warningText, { color: textColor }]}>
+              Enter your recovery seed phrase to restore an existing wallet. Select how many words your seed phrase contains.
+            </Text>
+          </View>
+        </View>
+
+        {/* Seed Word Count Selection */}
+        <View style={styles.section}>
+          <ThemedText style={[styles.sectionTitle, { color: secondaryText }]}>
+            Seed Phrase Length
+          </ThemedText>
+          <View style={[styles.sectionContent, { backgroundColor: cardBg, borderColor }]}>
+            {wordCountOptions.map((option, index) => (
+              <TouchableOpacity
+                key={option.count}
+                style={[
+                  styles.typeOption,
+                  index < wordCountOptions.length - 1 && { borderBottomWidth: 1, borderBottomColor: borderColor },
+                ]}
+                onPress={() => handleSeedWordCountSelect(option.count)}
+              >
+                <View style={styles.typeLeft}>
+                  <View style={[styles.typeIcon, { backgroundColor: '#3b82f620' }]}>
+                    <ThemedText style={styles.wordCountNumber}>{option.count}</ThemedText>
+                  </View>
+                  <View style={styles.typeInfo}>
+                    <Text style={[styles.typeTitle, { color: textColor }]}>
+                      {option.label}
+                    </Text>
+                    <Text style={[styles.typeSubtitle, { color: secondaryText }]}>
+                      {option.count === 12 ? 'Most common format' :
+                       option.count === 20 ? 'Extended security' : 'Maximum security'}
+                    </Text>
+                  </View>
+                </View>
+                <View style={styles.typeRight}>
+                  {seedWordCount === option.count ? (
+                    <MaterialCommunityIcons
+                      name="check-circle"
+                      size={24}
+                      color="#3b82f6"
+                    />
+                  ) : (
+                    <View style={[styles.radioOuter, { borderColor }]}>
+                      <View style={styles.radioInner} />
+                    </View>
+                  )}
+                </View>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </View>
+
+        {/* Continue Button */}
+        <View style={styles.section}>
+          <TouchableOpacity
+            style={styles.createButtonContainer}
+            onPress={handleContinueToSeedInput}
+            activeOpacity={0.85}
+          >
+            <LinearGradient
+              colors={['#3b82f6', '#2563eb']}
+              style={styles.createButtonGradient}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 0 }}
+            >
+              <MaterialCommunityIcons name="arrow-right" size={20} color="#fff" />
+              <Text style={styles.createButtonText}>Continue</Text>
+            </LinearGradient>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+    );
+  };
+
+  // Render Import Enter Seed Step
+  const renderImportEnterSeedStep = () => {
+    const columns = 2;
+    const itemsPerColumn = Math.ceil(seedWordCount / columns);
+
+    return (
+      <ScrollView
+        style={styles.content}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.scrollContentContainer}
+        keyboardShouldPersistTaps="handled"
+      >
+        {/* Header with paste button */}
+        <View style={styles.section}>
+          <View style={styles.seedInputHeader}>
+            <ThemedText style={[styles.sectionTitle, { color: secondaryText, marginBottom: 0 }]}>
+              Enter Your {seedWordCount} Words
+            </ThemedText>
+            <TouchableOpacity
+              style={[styles.pasteButton, { backgroundColor: '#3b82f620' }]}
+              onPress={handlePasteSeedPhrase}
+            >
+              <MaterialCommunityIcons name="content-paste" size={16} color="#3b82f6" />
+              <Text style={styles.pasteButtonText}>Paste</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        {/* Seed Words Grid */}
+        <View style={styles.section}>
+          <View style={[styles.seedInputContainer, { backgroundColor: cardBg, borderColor }]}>
+            <View style={styles.seedWordsGrid}>
+              {/* Left Column */}
+              <View style={styles.seedWordsColumn}>
+                {Array.from({ length: itemsPerColumn }).map((_, i) => {
+                  const index = i;
+                  if (index >= seedWordCount) return null;
+                  return (
+                    <View key={index} style={styles.seedWordInputRow}>
+                      <Text style={[styles.seedWordNumber, { color: secondaryText }]}>
+                        {index + 1}.
+                      </Text>
+                      <TextInput
+                        style={[
+                          styles.seedWordInput,
+                          {
+                            color: textColor,
+                            backgroundColor: colorScheme === 'dark' ? '#2a2a2a' : '#fff',
+                            borderColor: seedWords[index] ? '#3b82f6' : borderColor,
+                          }
+                        ]}
+                        value={seedWords[index]}
+                        onChangeText={(value) => handleSeedWordChange(index, value)}
+                        placeholder={`Word ${index + 1}`}
+                        placeholderTextColor={secondaryText}
+                        autoCapitalize="none"
+                        autoCorrect={false}
+                        autoComplete="off"
+                      />
+                    </View>
+                  );
+                })}
+              </View>
+              {/* Right Column */}
+              <View style={styles.seedWordsColumn}>
+                {Array.from({ length: itemsPerColumn }).map((_, i) => {
+                  const index = i + itemsPerColumn;
+                  if (index >= seedWordCount) return null;
+                  return (
+                    <View key={index} style={styles.seedWordInputRow}>
+                      <Text style={[styles.seedWordNumber, { color: secondaryText }]}>
+                        {index + 1}.
+                      </Text>
+                      <TextInput
+                        style={[
+                          styles.seedWordInput,
+                          {
+                            color: textColor,
+                            backgroundColor: colorScheme === 'dark' ? '#2a2a2a' : '#fff',
+                            borderColor: seedWords[index] ? '#3b82f6' : borderColor,
+                          }
+                        ]}
+                        value={seedWords[index]}
+                        onChangeText={(value) => handleSeedWordChange(index, value)}
+                        placeholder={`Word ${index + 1}`}
+                        placeholderTextColor={secondaryText}
+                        autoCapitalize="none"
+                        autoCorrect={false}
+                        autoComplete="off"
+                      />
+                    </View>
+                  );
+                })}
+              </View>
+            </View>
+          </View>
+        </View>
+
+        {/* Import Button */}
+        <View style={styles.section}>
+          <TouchableOpacity
+            style={[
+              styles.createButtonContainer,
+              !isValidSeedPhrase() && styles.buttonDisabled,
+            ]}
+            onPress={handleStartDiscovery}
+            disabled={!isValidSeedPhrase()}
+            activeOpacity={0.85}
+          >
+            <LinearGradient
+              colors={isValidSeedPhrase() ? ['#3b82f6', '#2563eb'] : ['#9ca3af', '#6b7280']}
+              style={styles.createButtonGradient}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 0 }}
+            >
+              <MaterialCommunityIcons name="magnify" size={20} color="#fff" />
+              <Text style={styles.createButtonText}>Find Wallet</Text>
+            </LinearGradient>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+    );
+  };
+
+  // Render Import Discovery Step
+  const renderImportDiscoveryStep = () => {
+    return (
+      <ScrollView
+        style={styles.content}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.scrollContentContainer}
+      >
+        {/* Discovery Status */}
+        {isDiscovering && (
+          <View style={styles.section}>
+            <View style={[styles.discoveryCard, { backgroundColor: cardBg, borderColor }]}>
+              <ActivityIndicator size="large" color="#3b82f6" />
+              <ThemedText style={styles.discoveryText}>
+                Scanning for wallets...
+              </ThemedText>
+              <Text style={[styles.discoveryProgress, { color: secondaryText }]}>
+                {discoveryProgress || 'Initializing...'}
+              </Text>
+            </View>
+          </View>
+        )}
+
+        {/* Discovered Wallets */}
+        {discoveredWallets.length > 0 && (
+          <View style={styles.section}>
+            <ThemedText style={[styles.sectionTitle, { color: secondaryText }]}>
+              {isDiscovering ? 'Found Wallets' : 'Select Wallet to Import'}
+            </ThemedText>
+            <View style={[styles.sectionContent, { backgroundColor: cardBg, borderColor }]}>
+              {discoveredWallets.map((item, index) => (
+                <TouchableOpacity
+                  key={item.id}
+                  style={[
+                    styles.walletOption,
+                    index < discoveredWallets.length - 1 && { borderBottomWidth: 1, borderBottomColor: borderColor },
+                  ]}
+                  onPress={() => setSelectedWalletIndex(index)}
+                >
+                  <View style={styles.walletOptionLeft}>
+                    <View style={[styles.typeIcon, { backgroundColor: '#10b98120' }]}>
+                      <MaterialCommunityIcons name="wallet" size={24} color="#10b981" />
+                    </View>
+                    <View style={styles.walletOptionInfo}>
+                      <Text style={[styles.typeTitle, { color: textColor }]}>
+                        {item.wallet.typeReadable}
+                      </Text>
+                      {item.subtitle ? (
+                        <Text
+                          style={[styles.typeSubtitle, { color: secondaryText }]}
+                          numberOfLines={1}
+                          ellipsizeMode="middle"
+                        >
+                          {item.subtitle}
+                        </Text>
+                      ) : null}
+                    </View>
+                  </View>
+                  <View style={styles.typeRight}>
+                    {selectedWalletIndex === index ? (
+                      <MaterialCommunityIcons
+                        name="check-circle"
+                        size={24}
+                        color="#10b981"
+                      />
+                    ) : (
+                      <View style={[styles.radioOuter, { borderColor }]}>
+                        <View style={styles.radioInner} />
+                      </View>
+                    )}
+                  </View>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </View>
+        )}
+
+        {/* Wallet Name Input */}
+        {!isDiscovering && discoveredWallets.length > 0 && (
+          <View style={styles.section}>
+            <ThemedText style={[styles.sectionTitle, { color: secondaryText }]}>
+              Wallet Name
+            </ThemedText>
+            <View style={[styles.inputContainer, { backgroundColor: cardBg, borderColor }]}>
+              <TextInput
+                style={[styles.input, { color: textColor }]}
+                placeholder={getNextDefaultWalletName()}
+                placeholderTextColor={secondaryText}
+                value={walletName}
+                onChangeText={setWalletName}
+                autoCapitalize="words"
+              />
+            </View>
+          </View>
+        )}
+
+        {/* No Wallets Found */}
+        {!isDiscovering && discoveredWallets.length === 0 && (
+          <View style={styles.section}>
+            <View style={[styles.noWalletsCard, { backgroundColor: '#fbbf2420', borderColor: '#fbbf24' }]}>
+              <MaterialCommunityIcons name="alert-circle-outline" size={48} color="#fbbf24" />
+              <ThemedText style={styles.noWalletsText}>
+                No wallets found with transaction history.
+              </ThemedText>
+              <Text style={[styles.noWalletsSubtext, { color: secondaryText }]}>
+                Please check your seed phrase and try again.
+              </Text>
+            </View>
+          </View>
+        )}
+
+        {/* Import Button */}
+        {!isDiscovering && discoveredWallets.length > 0 && (
+          <View style={styles.section}>
+            <TouchableOpacity
+              style={styles.createButtonContainer}
+              onPress={handleImportSelectedWallet}
+              disabled={isCreating}
+              activeOpacity={0.85}
+            >
+              <LinearGradient
+                colors={['#10b981', '#059669']}
+                style={styles.createButtonGradient}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0 }}
+              >
+                {isCreating ? (
+                  <ActivityIndicator color="#fff" />
+                ) : (
+                  <>
+                    <MaterialCommunityIcons name="check-circle" size={20} color="#fff" />
+                    <Text style={styles.createButtonText}>Import Wallet</Text>
+                  </>
+                )}
+              </LinearGradient>
+            </TouchableOpacity>
+          </View>
+        )}
+
+        {/* Try Again Button */}
+        {!isDiscovering && discoveredWallets.length === 0 && (
+          <View style={styles.section}>
+            <TouchableOpacity
+              style={[
+                styles.importButton,
+                {
+                  backgroundColor: colorScheme === 'dark' ? '#4a4a4a' : '#e5e5e5',
+                  borderColor: colorScheme === 'dark' ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.1)',
+                }
+              ]}
+              onPress={() => setStep('import-enter-seed')}
+              activeOpacity={0.85}
+            >
+              <MaterialCommunityIcons
+                name="arrow-left"
+                size={20}
+                color={colorScheme === 'dark' ? '#fff' : '#333'}
+              />
+              <Text style={[
+                styles.importButtonText,
+                { color: colorScheme === 'dark' ? '#fff' : '#333' }
+              ]}>
+                Go Back
+              </Text>
+            </TouchableOpacity>
+          </View>
+        )}
+      </ScrollView>
+    );
+  };
+
+  // Get header title based on step
+  const getHeaderTitle = () => {
+    switch (step) {
+      case 'create':
+        return 'Add Wallet';
+      case 'backup':
+        return 'Backup Wallet';
+      case 'import-select-words':
+        return 'Import Wallet';
+      case 'import-enter-seed':
+        return 'Enter Seed Phrase';
+      case 'import-discovery':
+        return 'Discovering Wallets';
+      default:
+        return 'Add Wallet';
+    }
+  };
+
+  // Render current step
+  const renderCurrentStep = () => {
+    switch (step) {
+      case 'create':
+        return renderCreateStep();
+      case 'backup':
+        return renderBackupStep();
+      case 'import-select-words':
+        return renderImportSelectWordsStep();
+      case 'import-enter-seed':
+        return renderImportEnterSeedStep();
+      case 'import-discovery':
+        return renderImportDiscoveryStep();
+      default:
+        return renderCreateStep();
+    }
+  };
+
   return (
     <ThemedView style={styles.container}>
       <StatusBar barStyle={colorScheme === 'dark' ? 'light-content' : 'dark-content'} />
@@ -411,15 +1095,19 @@ export default function AddWalletScreen() {
             style={styles.headerButton}
             onPress={handleClose}
           >
-            <MaterialCommunityIcons name="close" size={24} color={textColor} />
+            <MaterialCommunityIcons
+              name={step.startsWith('import-') ? 'arrow-left' : 'close'}
+              size={24}
+              color={textColor}
+            />
           </TouchableOpacity>
           <ThemedText type="title" style={styles.headerTitle}>
-            {step === 'create' ? 'Add Wallet' : 'Backup Wallet'}
+            {getHeaderTitle()}
           </ThemedText>
           <View style={styles.headerButton} />
         </ThemedView>
 
-        {step === 'create' ? renderCreateStep() : renderBackupStep()}
+        {renderCurrentStep()}
       </View>
     </ThemedView>
   );
@@ -663,5 +1351,123 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 18,
     fontWeight: 'bold',
+  },
+  // Import step styles
+  infoCardImport: {
+    flexDirection: 'row',
+    padding: 16,
+    borderRadius: 16,
+    borderWidth: 2,
+    marginBottom: 24,
+    marginHorizontal: 20,
+    gap: 12,
+  },
+  wordCountNumber: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: '#3b82f6',
+  },
+  seedInputHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  pasteButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 8,
+    gap: 6,
+  },
+  pasteButtonText: {
+    color: '#3b82f6',
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  seedInputContainer: {
+    padding: 16,
+    borderRadius: 16,
+    borderWidth: 1,
+  },
+  seedWordsGrid: {
+    flexDirection: 'row',
+    gap: 12,
+  },
+  seedWordsColumn: {
+    flex: 1,
+    gap: 10,
+  },
+  seedWordInputRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  seedWordNumber: {
+    width: 24,
+    fontSize: 14,
+    fontWeight: '600',
+    textAlign: 'right',
+  },
+  seedWordInput: {
+    flex: 1,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    borderRadius: 8,
+    borderWidth: 1,
+    fontSize: 14,
+    fontWeight: '500',
+  },
+  buttonDisabled: {
+    opacity: 0.6,
+  },
+  discoveryCard: {
+    padding: 32,
+    borderRadius: 16,
+    borderWidth: 1,
+    alignItems: 'center',
+    gap: 16,
+  },
+  discoveryText: {
+    fontSize: 18,
+    fontWeight: '600',
+    marginTop: 8,
+  },
+  discoveryProgress: {
+    fontSize: 14,
+    textAlign: 'center',
+  },
+  walletOption: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 16,
+  },
+  walletOptionLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+    gap: 12,
+  },
+  walletOptionInfo: {
+    flex: 1,
+    gap: 4,
+  },
+  noWalletsCard: {
+    padding: 32,
+    borderRadius: 16,
+    borderWidth: 2,
+    alignItems: 'center',
+    gap: 12,
+  },
+  noWalletsText: {
+    fontSize: 18,
+    fontWeight: '600',
+    textAlign: 'center',
+    marginTop: 8,
+  },
+  noWalletsSubtext: {
+    fontSize: 14,
+    textAlign: 'center',
   },
 });

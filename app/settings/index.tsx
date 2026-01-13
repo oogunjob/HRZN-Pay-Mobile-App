@@ -64,7 +64,7 @@ export default function SettingsScreen() {
         {
           icon: 'currency-usd',
           title: 'Default Currency',
-          subtitle: 'BTC',
+          subtitle: 'USD',
           type: 'navigate',
           onPress: () => {},
         },
@@ -80,12 +80,6 @@ export default function SettingsScreen() {
     {
       title: 'About',
       items: [
-        {
-          icon: 'information',
-          title: 'App Version',
-          subtitle: '1.0.0',
-          type: 'info',
-        },
         {
           icon: 'information-outline',
           title: 'About HRZN',
@@ -103,6 +97,12 @@ export default function SettingsScreen() {
           title: 'Privacy Policy',
           type: 'navigate',
           onPress: () => {},
+        },
+        {
+          icon: 'information',
+          title: 'App Version',
+          subtitle: '1.0.0',
+          type: 'info',
         },
       ],
     },

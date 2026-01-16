@@ -1,4 +1,10 @@
 <resources>
+    <!-- Required app colors -->
+    <color name="colorPrimary">#F7931A</color>
+    <color name="colorPrimaryDark">#F7931A</color>
+    <color name="splashscreen_background">#F7931A</color>
+    <color name="iconBackground">#ffffff</color>
+
     <color name="white">#FFF</color>
     <color name="background_color">#FFFFFF</color>
     <color name="widget_background">#FFFFFF</color>

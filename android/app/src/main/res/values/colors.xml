@@ -3,4 +3,11 @@
   <color name="iconBackground">#ffffff</color>
   <color name="colorPrimary">#023c69</color>
   <color name="colorPrimaryDark">#F7931A</color>
+
+  <!-- Widget colors (light theme) -->
+  <color name="text_primary">#000000</color>
+  <color name="text_secondary">#666666</color>
+  <color name="container_green">#D4EDDA</color>
+  <color name="container_red">#F8D7DA</color>
+  <color name="white">#FFFFFF</color>
 </resources>

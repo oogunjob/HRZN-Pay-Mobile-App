@@ -4,4 +4,5 @@
   <color name="text_secondary">#AAAAAA</color>
   <color name="container_green">#155724</color>
   <color name="container_red">#721C24</color>
+  <color name="widget_background">#1C1C1E</color>
 </resources>

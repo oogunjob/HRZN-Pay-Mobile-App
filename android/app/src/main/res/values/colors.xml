@@ -10,4 +10,5 @@
   <color name="container_green">#D4EDDA</color>
   <color name="container_red">#F8D7DA</color>
   <color name="white">#FFFFFF</color>
+  <color name="widget_background">#FFFFFF</color>
 </resources>

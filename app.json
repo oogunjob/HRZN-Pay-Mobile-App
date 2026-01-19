@@ -83,7 +83,8 @@
       "expo-font",
       "expo-router",
       "expo-web-browser",
-      "expo-localization"
+      "expo-localization",
+      "./plugins/withExcludeSupportLibraries"
     ],
     "extra": {
       "router": {},

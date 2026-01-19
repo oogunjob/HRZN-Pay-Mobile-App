@@ -48,6 +48,9 @@ jobs:
       - name: Install node_modules
         run: yarn install --frozen-lockfile
 
+      - name: Generate Android project (Expo Prebuild)
+        run: npx expo prebuild --platform android --clean
+
       - name: Setup Gradle (Read-only cache)
         uses: gradle/gradle-build-action@v3
         with:

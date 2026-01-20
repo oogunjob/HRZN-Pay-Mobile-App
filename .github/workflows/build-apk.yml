@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  android-build-check:
+  android-build:
     runs-on: ubuntu-latest
 
     env:

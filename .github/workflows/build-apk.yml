@@ -1,4 +1,4 @@
-name: Android Build Check
+name: Android Build
 
 on:
   pull_request:
@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  android-build-check:
+  android-build:
     runs-on: ubuntu-latest
 
     env:
@@ -46,7 +46,8 @@ jobs:
           java-version: '17'
 
       - name: Install node_modules
-        run: yarn install --frozen-lockfile
+        run: |
+          yarn install --frozen-lockfile || (yarn cache clean && yarn install --frozen-lockfile) || yarn install --frozen-lockfile
 
       - name: Generate Android project (Expo Prebuild)
         run: npx expo prebuild --platform android --clean

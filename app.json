@@ -1,6 +1,6 @@
 {
   "expo": {
-    "newArchEnabled": false,
+    "newArchEnabled": true,
     "name": "HRZN",
     "slug": "hrzn",
     "version": "1.0.0",
